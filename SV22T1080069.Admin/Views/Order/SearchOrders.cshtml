@@ -1,0 +1,190 @@
+﻿@model PaginationSearchResult<Order>
+<!-- Kết quả tìm kiếm -->
+@{
+    Layout = null;
+}
+<p style="margin:10px 0 10px 0">
+    Có <strong>@Model.RowCount</strong> đơn hàng trong tổng số <strong>@Model.PageCount</strong> trang
+</p>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr class="bg-primary">
+                <th>Khách hàng</th>
+                <th>Ngày lập</th>
+
+                <th>Nhân viên phụ trách</th>
+                <th>Thời điểm duyệt</th>
+                <th>Người giao hàng</th>
+                <th>Ngày nhận giao hàng</th>
+                <th>Thời điểm kết thúc</th>
+                <th>Trạng thái</th>
+                <th style="width:40px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Data)
+            {
+                <tr>
+                    <td>@item.CustomerName</td>
+                    <td>@item.OrderTime.ToString("HH:ss dd/MM/yyyy")</td>
+                    <td>@item.EmployeeName</td>
+                    <td>@(item.AcceptTime.HasValue? item.AcceptTime.Value.ToString("HH:mm dd/MM/yyyy") : "—")</td>
+                    <td>@item.ShipperName</td>
+                    <td>@(item.ShippedTime.HasValue? item.ShippedTime.Value.ToString("HH:mm dd/MM/yyyy") : "—")</td>
+                    <td>@(item.FinishedTime.HasValue? item.FinishedTime.Value.ToString("HH:mm dd/MM/yyyy") : "—")</td>
+                    <td>@item.Status</td>
+                    <td>
+                        <a href="~/Order/Details/@item.OrderID" class="btn btn-info btn-xs">
+                            <i class="glyphicon glyphicon-th-list"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@if (Model.PageCount > 1)
+{
+    <div style="text-align:center; margin:20px 0;">
+        <ul style="
+                list-style:none;
+                padding:0;
+                margin:0;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                gap:6px;
+            ">
+            @{
+                int current = Model.Page;
+                int total = Model.PageCount;
+
+                int start = Math.Max(2, current - 1);
+                int end = Math.Min(total - 1, current + 1);
+            }
+
+            <!-- First page -->
+            <li>
+                @if (current == 1)
+                {
+                    <span style="
+                                min-width:34px;
+                                height:34px;
+                                padding:0 10px;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                background:#007bff;
+                                color:#fff;
+                                border-radius:6px;
+                                font-weight:600;
+                            ">1</span>
+                }
+                else
+                {
+                    <a href="javascript:;" onclick="searchData(1)" style="
+                                min-width:34px;
+                                height:34px;
+                                padding:0 10px;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                border:1px solid #ccc;
+                                background:#f7f7f7;
+                                border-radius:6px;
+                                color:#333;
+                                text-decoration:none;
+                            ">1</a>
+                }
+            </li>
+
+            <!-- Left dots -->
+            @if (start > 2)
+            {
+                <li style="color:#999; padding:6px 8px;">…</li>
+            }
+
+            <!-- Middle pages -->
+            @for (int p = start; p <= end; p++)
+            {
+                <li>
+                    @if (p == current)
+                    {
+                        <span style="
+                                        min-width:34px;
+                                        height:34px;
+                                        padding:0 10px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        background:#007bff;
+                                        color:#fff;
+                                        border-radius:6px;
+                                        font-weight:600;
+                                    ">@p</span>
+                    }
+                    else
+                    {
+                        <a href="javascript:;" onclick="searchData(@p)" style="
+                                        min-width:34px;
+                                        height:34px;
+                                        padding:0 10px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        border:1px solid #ccc;
+                                        background:#f7f7f7;
+                                        border-radius:6px;
+                                        color:#333;
+                                        text-decoration:none;
+                                    ">@p</a>
+                    }
+                </li>
+            }
+
+            <!-- Right dots -->
+            @if (end < total - 1)
+            {
+                <li style="color:#999; padding:6px 8px;">…</li>
+            }
+
+            <!-- Last page -->
+            <li>
+                @if (current == total)
+                {
+                    <span style="
+                                min-width:34px;
+                                height:34px;
+                                padding:0 10px;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                background:#007bff;
+                                color:#fff;
+                                border-radius:6px;
+                                font-weight:600;
+                            ">@total</span>
+                }
+                else
+                {
+                    <a href="javascript:;" onclick="searchData(@total)" style="
+                                min-width:34px;
+                                height:34px;
+                                padding:0 10px;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                border:1px solid #ccc;
+                                background:#f7f7f7;
+                                border-radius:6px;
+                                color:#333;
+                                text-decoration:none;
+                            ">@total</a>
+                }
+            </li>
+
+        </ul>
+    </div>
+}

@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Quản lý đơn hàng";
+}
+@model OrderSearchCondition
+<div class="box box-primary">
+    <div class="box-body">
+        <!--Form đầu vào tìm kiếm-->
+        <form id="formSearchOrder" action="~/Order/SearchOrders" method="post" data-result="#orderContainer">
+            <div class="row container-fluid">
+                <input type="hidden" asp-for="PageSize" />
+                <div class="col-sm-3">
+                    <select class="form-control" asp-for="StatusID">
+                        <option value="0">-- Trạng thái --</option>
+                        <option value="1">Đơn hàng mới (chờ duyệt)</option>
+                        <option value="2">Đơn hàng đã duyệt (chờ chuyển hàng)</option>
+                        <option value="3">Đơn hàng đang được giao</option>
+                        <option value="4">Đơn hàng đã hoàn tất thành công</option>
+                        <option value="-1">Đơn hàng bị hủy</option>
+                        <option value="-2">Đơn hàng bị từ chối</option>
+                    </select>
+                </div>
+                @*  <div class="col-sm-2 datepicker-days">
+                    <input asp-for="FromTime"
+                           class="form-control date-picker"
+                           placeholder="dd/MM/yyyy" />
+
+                    <input asp-for="ToTime"
+                           class="form-control daterange-picker"
+                           placeholder="dd/MM/yyyy" />
+                </div> 
+                 *@
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="text"
+                               class="form-control daterange-picker"
+                               name="DateRange"
+                               placeholder="Tất cả thời gian"
+                               autocomplete="off" />
+
+                    </div>
+                </div>
+
+
+
+
+                @* <div class="col-sm-3">
+                    <input type="text" name="orderTime" class="form-control daterange-picker" placeholder="" />  *@
+                   
+                <div class="col-sm-6 input-group">
+                    <input type="text" asp-for="SearchValue"
+                           class="form-control"
+                           placeholder="Tìm kiếm theo tên khách hàng hoặc tên người giao hàng">
+                    <span class="input-group-btn">
+                        <button type="submit" id="search-btn" class="btn btn-flat btn-info">
+                            <i class="fa fa-search"></i> Tìm kiếm
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
+        <!-- Kết quả tìm kiếm -->
+        <div id="orderContainer"></div>
+
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function(){
+            $("#formSearchOrder").submit(function (e) {
+                e.preventDefault();
+                searchData(1);
+            });
+            searchData(@Model.Page);
+        })
+
+        //Gởi yêu cầu đến Search để lấy dữ liệu tại trang page, hiển thị dữ liệu vào #searchResult
+        function searchData(page) {
+
+            var url = $("#formSearchOrder").prop("action");
+            var method = $("#formSearchOrder").prop("method");
+            var container = $("#formSearchOrder").data("result");
+            var submitData = $("#formSearchOrder").serializeArray();
+            submitData.push({ "name":"page", "value": page });
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: submitData,
+                success: function (data) {
+                    $(container).html(data);
+                }
+            });
+        }
+    </script>
+}

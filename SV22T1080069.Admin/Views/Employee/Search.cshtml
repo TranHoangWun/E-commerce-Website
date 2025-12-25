@@ -1,0 +1,201 @@
+﻿
+@model PaginationSearchResult<Employee>
+@{
+    Layout = null;
+    int count = 0; // 1. Khai báo biến đếm
+}
+<!-- Hiển thị dữ liệu -->
+<p style="margin-top:10px">
+    Có <strong>@Model.RowCount</strong> nhân viên trong tổng số <strong>@Model.PageCount</strong> trang.
+</p>
+<div class="row">
+    @foreach (var item in Model.Data)
+    {
+        count++; // 2. Tăng biến đếm
+
+        <div class="col-sm-4">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">@item.FullName</h3>
+                    <div class="box-tools pull-right">
+                        <a class="btn btn-box-tool" href="~/Employee/Edit/@item.EmployeeId">
+                            <i class="fa fa-edit text-primary"></i>
+                        </a>
+                        <a class="btn btn-box-tool" href="~/Employee/Delete/@item.EmployeeId">
+                            <i class="fa fa-trash text-danger"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <img class="profile-user-img img-responsive img-bordered" src="@Url.Content("~/images/employees/" + item.Photo)">
+                        </div>
+                        <div class="col-sm-8">
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <i class="fa fa-birthday-cake"></i> @string.Format("{0:dd/MM/yyyy}", item.BirthDate)
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa fa-phone"></i> @item.Phone
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa fa-envelope"></i> @item.Email
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        if (count % 3 == 0)
+        {
+            <div class="clearfix visible-sm-block visible-md-block visible-lg-block"></div>
+        }
+
+    }
+</div>
+
+@if (Model.PageCount > 1)
+{
+    <div style="text-align:center; margin:20px 0;">
+        <ul style="
+                    list-style:none;
+                    padding:0;
+                    margin:0;
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    gap:6px;
+                ">
+            @{
+                int current = Model.Page;
+                int total = Model.PageCount;
+
+                int start = Math.Max(2, current - 1);
+                int end = Math.Min(total - 1, current + 1);
+            }
+
+            <!-- First page -->
+            <li>
+                @if (current == 1)
+                {
+                    <span style="
+                                        min-width:34px;
+                                        height:34px;
+                                        padding:0 10px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        background:#007bff;
+                                        color:#fff;
+                                        border-radius:6px;
+                                        font-weight:600;
+                                    ">1</span>
+                }
+                else
+                {
+                    <a href="javascript:;" onclick="searchData(1)" style="
+                                        min-width:34px;
+                                        height:34px;
+                                        padding:0 10px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        border:1px solid #ccc;
+                                        background:#f7f7f7;
+                                        border-radius:6px;
+                                        color:#333;
+                                        text-decoration:none;
+                                    ">1</a>
+                }
+            </li>
+
+            <!-- Left dots -->
+            @if (start > 2)
+            {
+                <li style="color:#999; padding:6px 8px;">…</li>
+            }
+
+            <!-- Middle pages -->
+            @for (int p = start; p <= end; p++)
+            {
+                <li>
+                    @if (p == current)
+                    {
+                        <span style="
+                                                    min-width:34px;
+                                                    height:34px;
+                                                    padding:0 10px;
+                                                    display:flex;
+                                                    align-items:center;
+                                                    justify-content:center;
+                                                    background:#007bff;
+                                                    color:#fff;
+                                                    border-radius:6px;
+                                                    font-weight:600;
+                                                ">@p</span>
+                    }
+                    else
+                    {
+                        <a href="javascript:;" onclick="searchData(@p)" style="
+                                                    min-width:34px;
+                                                    height:34px;
+                                                    padding:0 10px;
+                                                    display:flex;
+                                                    align-items:center;
+                                                    justify-content:center;
+                                                    border:1px solid #ccc;
+                                                    background:#f7f7f7;
+                                                    border-radius:6px;
+                                                    color:#333;
+                                                    text-decoration:none;
+                                                ">@p</a>
+                    }
+                </li>
+            }
+
+            <!-- Right dots -->
+            @if (end < total - 1)
+            {
+                <li style="color:#999; padding:6px 8px;">…</li>
+            }
+
+            <!-- Last page -->
+            <li>
+                @if (current == total)
+                {
+                    <span style="
+                                        min-width:34px;
+                                        height:34px;
+                                        padding:0 10px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        background:#007bff;
+                                        color:#fff;
+                                        border-radius:6px;
+                                        font-weight:600;
+                                    ">@total</span>
+                }
+                else
+                {
+                    <a href="javascript:;" onclick="searchData(@total)" style="
+                                        min-width:34px;
+                                        height:34px;
+                                        padding:0 10px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        border:1px solid #ccc;
+                                        background:#f7f7f7;
+                                        border-radius:6px;
+                                        color:#333;
+                                        text-decoration:none;
+                                    ">@total</a>
+                }
+            </li>
+
+        </ul>
+    </div>
+}

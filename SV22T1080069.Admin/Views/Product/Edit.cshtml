@@ -1,0 +1,234 @@
+﻿@{
+
+}
+@model ProductEditModel
+<div class="box box-primary">
+
+    <div class="box-header with-border ">
+        <h3 class="box-title">Thông tin mặt hàng</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <form class="form-horizontal" action="~/Product/SaveData" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="@nameof(Model.ProductID)" value="@Model.ProductID" />
+            <div class="form-group">
+                <label class="control-label col-sm-2">Tên mặt hàng:</label>
+                <div class="col-sm-10">
+                    @* <input type="text" class="form-control" autofocus> *@
+                    <input type="text" class="form-control" autofocus name="@nameof(Model.ProductName)" value="@Model.ProductName" />
+                    <span asp-validation-for="ProductName"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2">Mô tả:</label>
+                <div class="col-sm-10">
+                    @* <textarea class="form-control" rows="3" autofocus name="@nameof(Model.ProductDescription)"
+                    value="@Model.ProductDescription"></textarea> *@
+                    <textarea class="form-control" rows="3" autofocus asp-for="ProductDescription"></textarea>
+                    <span asp-validation-for="ProductDescription"></span>
+                    
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2 ">Loại hàng:</label>
+                <div class="col-sm-10">
+                    <select class="form-control select2" name="CategoryID" asp-for="CategoryID" asp-items="await SelectListHelper.Categories()">
+                    </select>
+                    <span asp-validation-for="CategoryID"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2 ">Nhà cung cấp:</label>
+                <div class="col-sm-10">
+                    <select class="form-control select2" name="SupplierID" asp-for="SupplierID" asp-items="await SelectListHelper.Suppliers()">
+                        @* <option value="">-- Chọn nhà cung cấp --</option>                        
+                        <option value="1">Công ty Xuất nhập khẩu Thành Hưng</option>
+                        <option value="2">Công ty TNHH Sao Mai Việt</option> *@
+                    </select>
+                    <span asp-validation-for="SupplierID"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2">Đơn vị tính:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" autofocus name="@nameof(Model.Unit)" value="@Model.Unit" />
+                    <span asp-validation-for="Unit"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2">Giá hàng:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control inputmask-numeric" autofocus name="@nameof(Model.Price)" value="@Model.Price" />
+                    <span asp-validation-for="Price"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-sm-10">
+                    <div class="checkbox">
+                        <label><input type="checkbox" value="true" name="@nameof(Model.IsSelling)"
+                            @(Model.IsSelling ? "checked" : "")>Hiện đang được bán</label>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="form-group">
+                <label class="control-label col-sm-2">Ảnh minh họa:</label>
+                <div class="col-sm-10">
+                    @* <input type="file" class="form-control" accept="image/*"
+                           onchange="document.getElementById('Photo').src = window.URL.createObjectURL(this.files[0])" /> *@
+                    <input type="hidden" asp-for="Photo" />
+                    <input type="file" class="form-control" accept="image/*" asp-for="UploadPhoto"
+                           onchange="document.getElementById('imgPhoto').src = window.URL.createObjectURL(this.files[0])" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-sm-10">
+                    <img id="imgPhoto" src="~/images/products/@Model.Photo" class="img img-bordered" style="width:200px" />
+                    @* <img id="Photo" src="~/images/products/@Model.Photo" class="img img-bordered" style="width:200px" /> *@
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Lưu dữ liệu
+                    </button>
+                    <a class="btn btn-warning" href="~/Product">
+                        Quay lại
+                    </a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+
+<div class="box box-info">
+    <div class="box-header with-border ">
+        <h3 class="box-title">Thư viện ảnh</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr class="bg-gray">
+                    <th>Ảnh</th>
+                    <th>Mô tả/tiêu đề</th>
+                    <th>Thứ tự hiển thị</th>
+                    <th>Ẩn ảnh</th>
+                    <th class="text-right">
+                        <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=add">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @* @if (Model.Photos != null) *@
+                @foreach (var item in Model.Photos)
+                {
+                    <tr>
+                        <td style="vertical-align:middle">
+                            @if (!item.IsHidden)
+                            { <img src="~/images/products/@item.Photo" alt="@item.Photo" style="width:100px" />
+
+                            }
+                            else
+                            {
+                                <span class="text-muted">[Ảnh bị ẩn]</span>
+                            }
+                        </td>
+                        <td style="vertical-align:middle;">
+                            @item.Description
+                        </td>
+                        <td style="vertical-align:middle;">@item.DisplayOrder</td>
+                        <td style="vertical-align:middle;"></td>
+                        <td style="vertical-align:middle; text-align:right">
+                            <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=edit&photoId=@item.PhotoId">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                                <a class="btn btn-xs btn-danger" href="~/Product/Photo/@Model.ProductID?method=delete&photoId=@item.PhotoId" onclick="return confirm('Xóa ảnh của mặt hàng hay không?')">
+                                <i class="fa fa-remove"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="box box-info">
+
+    <div class="box-header with-border ">
+        <h3 class="box-title">Thuộc tính của mặt hàng</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr class="bg-gray">
+                    <th>Tên thuộc tính</th>
+                    <th>Giá trị thuộc tính</th>
+                    <th>Thứ tự hiển thị</th>
+                    <th class="text-right">
+                        <a class="btn btn-xs btn-primary" href="~/Product/Attribute/@Model.ProductID?method=add">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @* @for (int i = 1; i <= 5; i++) *@
+                @if (Model.Attributes != null)
+                {
+                    foreach (var item in Model.Attributes)
+                    {
+                        <tr>
+                            <td style="vertical-align:middle">@item.AttributeName</td>
+                            <td style="vertical-align:middle;">@item.AttributeValue</td>
+                            <td style="vertical-align:middle;">@item.DisplayOrder</td>
+                            <td style="vertical-align:middle; text-align:right">
+                                <a class="btn btn-xs btn-primary" href="~/Product/Attribute/@Model.ProductID?method=edit&attributeId=@item.AttributeID">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a class="btn btn-xs btn-danger" href="~/Product/Attribute/@Model.ProductID?method=delete&attributeId=@item.AttributeID" onclick="return confirm('Xóa thuộc tính này của mặt hàng?')">
+                                    <i class="fa fa-remove"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="box-footer text-center">
+    </div>
+
+</div>
+

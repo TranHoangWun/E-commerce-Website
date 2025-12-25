@@ -1,0 +1,12 @@
+# Visual Studio 
+.vs/ 
+*.user 
+*.suo 
+*.cache 
+*.log 
+bin/ 
+obj/ 
+*.nupkg 
+packages/ 
+# Exclude Shop project 
+SV22T1080069.Shop/ 
