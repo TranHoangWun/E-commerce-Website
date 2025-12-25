@@ -8,5 +8,4 @@ bin/
 obj/ 
 *.nupkg 
 packages/ 
-# Exclude Shop project 
-SV22T1080069.Shop/ 
+
