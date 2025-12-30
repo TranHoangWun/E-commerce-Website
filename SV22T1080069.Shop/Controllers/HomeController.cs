@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SV22T1080069.BusinessLayers;
 using SV22T1080069.Shop.Models;
 using System.Diagnostics;
 
 namespace SV22T1080069.Shop.Controllers
 {
+   
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -13,11 +16,33 @@ namespace SV22T1080069.Shop.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+        /// <summary>
+        /// Trang chủ - Hiển thị 4 sản phẩm đắt tiền nhất
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Index()
+        {
+            var top4Products = await ProductDataService.ProductDB.TopProductsByPriceAsync(4);
+            return View(top4Products);
+        }
+
+        public ActionResult About()
+        {
+            return View();
+        }
+        public ActionResult Portfolio()
         {
             return View();
         }
 
+        public ActionResult Contact()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

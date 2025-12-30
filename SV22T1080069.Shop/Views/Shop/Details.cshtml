@@ -1,0 +1,337 @@
+﻿@model SV22T1080069.Shop.Models.ProductDetailViewModel
+
+<!-- ##### Breadcrumb Area Start ##### -->
+<div class="breadcrumb-area">
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url('@Url.Content("~/assets/img/bg-img/3b.jpg")');">
+        <h2>CHI TIẾT SẢN PHẨM</h2>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("Index", "Home")">
+                                <i class="fa fa-home"></i> Trang chủ
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("Index", "Shop")">Cửa hàng</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @Model.Product.ProductName
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Breadcrumb Area End ##### -->
+<!-- ##### Single Product Details Area Start ##### -->
+<section class="single_product_details_area mb-50">
+    <div class="produts-details--content mb-50">
+        <div class="container">
+            <div class="row justify-content-between">
+
+                <!-- Ảnh sản phẩm -->
+                <div class="col-12 col-md-6 col-lg-5">
+                    <div class="single_product_thumb">
+                        <div id="product_details_slider" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @if (Model.Photos != null && Model.Photos.Any())
+                                {
+                                    for (int i = 0; i < Model.Photos.Count; i++)
+                                    {
+                                        var photo = Model.Photos[i];
+                                        var imgUrl = ApplicationContext.ProductImagePath + photo.Photo;
+
+                                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                                            <a class="product-main-img"
+                                               href="@imgUrl"
+                                               title="@Model.Product.ProductName">
+                                                <img class="d-block w-100"
+                                                     src="@imgUrl"
+                                                     alt="@Model.Product.ProductName" />
+                                            </a>
+                                        </div>
+                                    }
+                                }
+
+                                else
+                                {
+                                    var imgUrl = ApplicationContext.ProductImagePath + Model.Product.Photo;
+                                    <!-- fallback: dùng ảnh chính của Product -->
+                                    <div class="carousel-item active">
+                                        <a class="product-main-img"
+                                           href="@imgUrl"
+                                           title="@Model.Product.ProductName">
+                                            <img class="d-block w-100"
+                                                 src="@imgUrl"
+                                                 alt="@Model.Product.ProductName" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+
+                            <ol class="carousel-indicators">
+                                @if (Model.Photos != null && Model.Photos.Any())
+                                {
+                                    for (int i = 0; i < Model.Photos.Count; i++)
+                                    {
+                                        var photo = Model.Photos[i]; 
+                                        var thumbUrl = ApplicationContext.ProductImagePath + photo.Photo;
+                                        <li class="@(i == 0 ? "active" : "")"
+                                            data-target="#product_details_slider"
+                                            data-slide-to="@i"
+                                            style="background-image:url('@thumbUrl');">
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    var thumbUrl = ApplicationContext.ProductImagePath + Model.Product.Photo;
+                                    <li class="active"
+                                        data-target="#product_details_slider" data-slide-to="0"
+                                        style="background-image:url('@thumbUrl');">
+                                    </li>
+                                }
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin sản phẩm -->
+                <div class="col-12 col-md-6">
+                    <div class="single_product_desc">
+                        <h4 class="title">@Model.Product.ProductName</h4>
+                        <p class="text-muted mb-1">
+                            Danh mục: @Model.Product.CategoryID
+                        </p>
+                        <h4 class="price">@Model.Product.Price.ToString("N0") VNĐ</h4>
+                        @* <div class="short_overview">
+                            <p>@Model.Product.ProductDescription</p>
+                        </div> *@
+
+                        <div class="cart--area d-flex flex-wrap align-items-center">
+                            <form class="cart clearfix d-flex align-items-center" method="post">
+                                <div class="quantity">
+                                    <span class="qty-minus"
+                                          onclick="var e=document.getElementById('qty');var q=e.value; if(!isNaN(q)&&q>1)e.value--; return false;">
+                                        <i class="fa fa-minus" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="number" class="qty-text" id="qty"
+                                           step="1" min="1" max="99"
+                                           name="quantity" value="1" />
+                                    <span class="qty-plus"
+                                          onclick="var e=document.getElementById('qty');var q=e.value; if(!isNaN(q))e.value++; return false;">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <button type="submit" name="addtocart" class="btn alazea-btn ml-15">
+                                    Thêm vào giỏ
+                                </button>
+                            </form>
+
+                            <div class="wishlist-compare d-flex flex-wrap align-items-center">
+                                <a href="#" class="wishlist-btn ml-15" title="Thêm vào yêu thích">
+                                    <i class="icon_heart_alt"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="products--meta">
+                            <p><span>Mã sản phẩm:</span> <span>@Model.Product.ProductID</span></p>
+                            <p><span>Đơn vị:</span> <span>@Model.Product.Unit</span></p>
+                            <p>
+                                <span>Chia sẻ:</span>
+                                <span>
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                                </span>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs mô tả & thông tin thêm -->
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="product_details_tab clearfix">
+                    <ul class="nav nav-tabs" role="tablist" id="product-details-tab">
+                        <li class="nav-item">
+                            <a href="#description" class="nav-link active" data-toggle="tab" role="tab">
+                                Mô tả chi tiết
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#addi-info" class="nav-link" data-toggle="tab" role="tab">
+                                Thông tin thêm
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#reviews" class="nav-link" data-toggle="tab" role="tab">
+                                Đánh giá <span class="text-muted">(0)</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade show active" id="description">
+                            <div class="description_area">
+                                <p>@Model.Product.ProductDescription</p>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane fade" id="addi-info">
+                            <div class="additional_info_area">
+                                <p><strong>Đơn vị:</strong> @Model.Product.Unit</p>
+                                <p><strong>Giá:</strong> @Model.Product.Price.ToString("N0") VNĐ</p>
+
+                                @if (Model.Attributes != null && Model.Attributes.Any())
+                                {
+                                    foreach (var attr in Model.Attributes)
+                                    {
+                                        <p>
+                                            <strong>@attr.AttributeName:</strong>
+                                            @attr.AttributeValue
+                                        </p>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted">Chưa có thuộc tính bổ sung.</p>
+                                }
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane fade" id="reviews">
+                            <div class="reviews_area">
+                                <p>Chưa có đánh giá cho sản phẩm này.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- ##### Single Product Details Area End ##### -->
+<!-- ##### Related Product Area Start ##### -->
+<div class="related-products-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center">
+                    <h2>Sản phẩm cùng danh mục</h2>
+                    <p>Những sản phẩm khác trong danh mục này.</p>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
+        {
+            <div id="relatedProductsCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+                <div class="carousel-inner">
+                    @{
+                        var items = Model.RelatedProducts;
+                        int chunkSize = 4; // mỗi slide 4 sản phẩm
+                        int index = 0;
+                    }
+
+                    @while (index < items.Count)
+                    {
+                        var chunk = items.Skip(index).Take(chunkSize).ToList();
+                        <div class="carousel-item @(index == 0 ? "active" : "")">
+                            <div class="row">
+                                @foreach (var item in chunk)
+                                {
+                                    var relatedImgUrl = ApplicationContext.ProductImagePath + item.Photo;
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <div class="single-product-area mb-100">
+                                            <div class="product-img related-product-img">
+                                                <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })">
+                                                    @* <img src="~/images/products/@item.Photo" alt="@item.ProductName" /> *@
+                                                    <img src="@relatedImgUrl" alt="@item.ProductName" />
+                                                </a>
+                                                <div class="product-meta d-flex">
+                                                    <a href="@Url.Action("Wishlist", "Account", new { id = item.ProductID })"
+                                                       class="wishlist-btn"><i class="icon_heart_alt"></i></a>
+                                                    <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })"
+                                                       class="add-to-cart-btn">Thêm vào giỏ</a>
+                                                </div>
+                                            </div>
+                                            <div class="product-info mt-15 text-center">
+                                                <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })">
+                                                    <p>@item.ProductName</p>
+                                                </a>
+                                                <h6>@item.Price.ToString("N0") VNĐ</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        index += chunkSize;
+                    }
+                </div>
+
+                <!-- Nút mũi tên -->
+                <a class="carousel-control-prev" href="#relatedProductsCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#relatedProductsCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-muted">Chưa có sản phẩm nào khác trong danh mục này.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            if ($.fn.magnificPopup) {
+                // KHÔNG dùng .product-img nữa
+                $('.single_product_thumb').magnificPopup({
+                    delegate: 'a.product-main-img',   // chỉ các ảnh chi tiết
+                    type: 'image',
+                    gallery: {
+                        enabled: true
+                    }
+                });
+            }
+        });
+    </script>
+
+}
+<!-- ##### Related Product Area End ##### -->
+@* <div class="carousel-item @(i == 0 ? "active" : "")">
+    <a class="product-main-img"
+       href="~/images/products/@photo.Photo"
+       title="@Model.Product.ProductName">
+        <img class="d-block w-100"
+             src="~/images/products/@photo.Photo"
+             alt="@Model.Product.ProductName" />
+    </a>
+</div> *@

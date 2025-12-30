@@ -1,0 +1,120 @@
+﻿@{
+    ViewBag.Title = "Đăng ký";
+}
+
+<div class="breadcrumb-area">
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url(/assets/img/bg-img/2b.png);">
+        <h2>ĐĂNG KÝ</h2>
+    </div>
+</div>
+
+<div class="auth-page">
+    <div class="auth-card">
+        <h2 class="auth-title">Đăng ký</h2>
+        <p class="auth-subtitle">Tạo tài khoản để lưu lại những góc xanh bạn yêu thích.</p>
+
+        @* Hiển thị tất cả lỗi ModelState *@
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+            </div>
+        }
+
+        <form asp-action="Register"
+              asp-controller="Account"
+              method="post"
+              class="auth-form">
+
+            <div class="form-group">
+                <label for="reg-name">Họ và tên</label>
+                <input type="text"
+                       name="fullName"
+                       id="reg-name"
+                       class="form-control"
+                       placeholder="Nguyễn Văn A"
+                       value="@ViewBag.FullName"
+                       required />
+            </div>
+
+            <div class="form-group">
+                <label for="reg-email">Email</label>
+                <input type="email"
+                       name="email"
+                       id="reg-email"
+                       class="form-control"
+                       placeholder="Email dùng để đăng nhập"
+                       value="@ViewBag.Email"
+                       required />
+            </div>
+
+            <div class="form-group">
+                <label for="reg-phone">Số điện thoại</label>
+                <input type="text"
+                       name="phone"
+                       id="reg-phone"
+                       class="form-control"
+                       placeholder="Ví dụ: 0901 234 567"
+                       value="@ViewBag.Phone" />
+            </div>
+
+            <div class="form-group">
+                <label for="reg-address">Địa chỉ</label>
+                <input type="text"
+                       name="address"
+                       id="reg-address"
+                       class="form-control"
+                       placeholder="Số nhà, đường, phường..."
+                       value="@ViewBag.Address" />
+            </div>
+
+            <div class="form-group">
+                <label for="reg-province">Tỉnh/Thành phố</label>
+                @* Dùng dropdown Provinces giống Profile *@
+                @Html.DropDownList(
+                "province",
+                                (IEnumerable<SelectListItem>)ViewBag.Provinces,
+                                new { @class = "form-control", id = "reg-province" })
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="reg-password">Mật khẩu</label>
+                    <input type="password"
+                           name="password"
+                           id="reg-password"
+                           class="form-control"
+                           required />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="reg-confirm">Nhập lại mật khẩu</label>
+                    <input type="password"
+                           name="confirmPassword"
+                           id="reg-confirm"
+                           class="form-control"
+                           required />
+                </div>
+            </div>
+
+            <div class="auth-checkbox mb-3">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="agree" required />
+                    <label class="custom-control-label" for="agree">
+                        Tôi đồng ý với điều khoản sử dụng và chính sách bảo mật.
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="alazea-btn">Đăng ký</button>
+
+            <p class="auth-extra">
+                Đã có tài khoản?
+                <a asp-controller="Account" asp-action="Login">Đăng nhập</a>
+            </p>
+        </form>
+    </div>
+</div>

@@ -1,50 +1,79 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SV22T1080069.Shop</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SV22T1080069.Shop.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SV22T1080069.Shop</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+﻿    @{
+        Layout = null;
+    }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - SV22T1080069.Shop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <title>Hoa Mùa Hạ</title>
+
+        <link rel="icon" href="~/assets/img/core-img/favicon.ico" />
+        <link rel="stylesheet" href="~/assets/css/style.css" />
+    </head>
+    <body>
+        <!-- Preloader -->
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-circle"></div>
+            <div class="preloader-img">
+                <img src="~/assets/img/core-img/leaf.png" alt="" />
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
-</html>
+
+        @{
+            await Html.RenderPartialAsync("_Header");
+        }
+
+        @RenderBody()
+
+        @{
+            await Html.RenderPartialAsync("_Footer");
+        }
+   
+
+        <!-- Scripts -->
+        <script src="~/assets/js/jquery/jquery-2.2.4.min.js"></script>
+        <script src="~/assets/js/bootstrap/popper.min.js"></script>
+        <script src="~/assets/js/bootstrap/bootstrap.min.js"></script>
+        <script src="~/assets/js/plugins/plugins.js"></script>
+        <script src="~/assets/js/active.js"></script>
+        @RenderSection("Scripts", required: false)
+    <script>
+                document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.add-to-cart-btn');
+            if (!btn) return;
+
+            e.preventDefault();
+
+            const id = btn.dataset.id;
+            console.log('Add to cart clicked, id =', id);
+
+            fetch('/Cart/AddAjax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                body: 'id=' + encodeURIComponent(id) + '&quantity=1'
+            })
+            .then(r => {
+                console.log('Response status', r.status);
+                if (!r.ok) throw new Error('Error ' + r.status);
+                return r.json();
+            })
+            .then(data => {
+                console.log('AddAjax result', data);
+                if (data.success) {
+                    const span = document.getElementById('cart-quantity');
+                    if (span) span.textContent = '(' + data.totalQuantity + ')';
+                     alert('Đã thêm sản phẩm vào giỏ hàng');
+                }
+            })
+            .catch(err => console.error('AddAjax error', err));
+        });
+    </script>
+    </body>
+    </html>
+

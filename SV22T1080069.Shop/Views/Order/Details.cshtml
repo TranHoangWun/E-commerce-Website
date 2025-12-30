@@ -1,0 +1,239 @@
+﻿@model SV22T1080069.Shop.Models.OrderProfileItemViewModel
+@{
+    ViewBag.Title = "Chi tiết đơn hàng";
+    var order = Model.Order;
+    bool isCanceled = order.Status == Constants.ORDER_CANCEL;
+    bool isRejected = order.Status == Constants.ORDER_REJECTED;
+
+    bool stepPlaced = order.OrderTime != default;
+    bool stepAccepted = order.AcceptTime != null;
+    bool stepShipped = order.ShippedTime != null;
+    bool stepDone = order.FinishedTime != null && order.Status == Constants.ORDER_FINISHED;
+}
+
+<div class="breadcrumb-area">
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url(@Url.Content("~/assets/img/bg-img/3b.jpg")); ">
+        <h2>CHI TIẾT ĐƠN HÀNG</h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("Index", "Home")">
+                                <i class="fa fa-home"></i> Trang chủ
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Chi tiết đơn hàng
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    @if (order != null)
+    {
+        <!-- Header đơn hàng + nút hủy -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 order-header">
+            <div>
+                <h4 class="mb-1">Đơn hàng #@order.OrderID</h4>
+                <div class="text-muted small">
+                    Ngày đặt: @order.OrderTime.ToString("dd/MM/yyyy HH:mm")
+                </div>
+            </div>
+
+            <div class="mt-2 mt-md-0 text-md-right">
+                <span class="small text-muted mr-1">Trạng thái:</span>
+                <span class="badge badge-status status-@order.Status">
+                    @order.StatusDescription
+                </span>
+                @if (Model.CanCancel)
+                {
+                    <form asp-action="Cancel"
+                          asp-controller="Order"
+                          method="post"
+                          class="d-inline-block ml-2"
+                          onsubmit="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?');">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@order.OrderID" />
+                        <button type="submit" class="btn btn-outline-danger btn-sm px-3">
+                            Hủy đơn
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+        <hr class="mt-0 mb-3" />
+
+
+        <!-- Timeline trạng thái -->
+        <div class="order-timeline mb-4">
+            @if (!isCanceled && !isRejected)
+            {
+                <ul class="timeline-steps d-flex flex-column flex-md-row justify-content-between">
+                    <li class="timeline-step @(stepPlaced ? "active" : "")">
+                        <div class="timeline-icon">
+                            <i class="fa fa-shopping-bag"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="title">Đã đặt hàng</div>
+                            <div class="time">
+                                @order.OrderTime.ToString("dd/MM/yyyy HH:mm")
+                            </div>
+                        </div>
+                    </li>
+                    <li class="timeline-step @(stepAccepted ? "active" : "")">
+                        <div class="timeline-icon">
+                            <i class="fa fa-check-circle"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="title">Đã xác nhận</div>
+                            <div class="time">
+                                @(order.AcceptTime?.ToString("dd/MM/yyyy HH:mm") ?? "Chưa cập nhật")
+                            </div>
+                        </div>
+                    </li>
+                    <li class="timeline-step @(stepShipped ? "active" : "")">
+                        <div class="timeline-icon">
+                            <i class="fa fa-truck"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="title">Đang vận chuyển</div>
+                            <div class="time">
+                                @(order.ShippedTime?.ToString("dd/MM/yyyy HH:mm") ?? "Chưa cập nhật")
+                            </div>
+                        </div>
+                    </li>
+                    <li class="timeline-step @(stepDone ? "active" : "")">
+                        <div class="timeline-icon">
+                            <i class="fa fa-box"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="title">Hoàn tất</div>
+                            <div class="time">
+                                @(order.FinishedTime?.ToString("dd/MM/yyyy HH:mm") ?? "Chưa cập nhật")
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <ul class="timeline-steps d-flex flex-column flex-md-row justify-content-start">
+                    <li class="timeline-step active">
+                        <div class="timeline-icon">
+                            <i class="fa fa-shopping-bag"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="title">Đã đặt hàng</div>
+                            <div class="time">
+                                @order.OrderTime.ToString("dd/MM/yyyy HH:mm")
+                            </div>
+                        </div>
+                    </li>
+                    <li class="timeline-step active">
+                        <div class="timeline-icon text-danger">
+                            <i class="fa fa-times-circle"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="title text-danger">
+                                @(isCanceled ? "Đã hủy" : "Đã từ chối")
+                            </div>
+                            <div class="time">
+                                @(order.FinishedTime?.ToString("dd/MM/yyyy HH:mm") ?? "Chưa cập nhật")
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            }
+        </div>
+
+        <!-- Thông tin nhận hàng  -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h5 class="mb-3">Thông tin nhận hàng</h5>
+                <p class="mb-1">@order.CustomerName</p>
+                <p class="mb-1">Điện thoại: @order.CustomerPhone</p>
+                <p class="mb-1">Email: @order.CustomerEmail</p>
+                <p class="mb-0">
+                    Địa chỉ: @order.DeliveryAddress, @order.DeliveryProvince
+                </p>
+            </div>
+        </div>
+        <!-- Danh sách sản phẩm -->
+        <h5 class="mb-3">Sản phẩm trong đơn</h5>
+        <div class="table-responsive">
+            <table class="table table-borderless table-hover align-middle order-items-table">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 90px;">Ảnh</th>
+                        <th>Sản phẩm</th>
+                        <th style="width: 150px;">Đơn giá</th>
+                        <th style="width: 90px;">Số lượng</th>
+                        <th style="width: 200px;">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        var productUrl = Url.Action("Details", "Shop", new { id = item.ProductID });
+                        var imgUrl = string.IsNullOrEmpty(item.Photo)
+                        ? ApplicationContext.ProductImagePath + "nophoto.png"
+                        : ApplicationContext.ProductImagePath + item.Photo;
+                        <tr>
+                            <td>
+                                <a href="@productUrl">
+                                    @* <img src="~/images/products/@item.Photo" class="img-thumbnail" alt="@item.ProductName" /> *@
+                                    <img src="@imgUrl" class="img-thumbnail" alt="@item.ProductName" />
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@productUrl" class="order-item-name">
+                                    @item.ProductName
+                                </a><br />
+                                <small class="text-muted">@item.Unit</small>
+                            </td>
+                            <td>@String.Format("{0:N0} VNĐ", item.SalePrice)</td>
+                            <td>@item.Quantity</td>
+                            <td class="text-danger font-weight-bold">
+                                @String.Format("{0:N0} VNĐ", item.TotalPrice)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="4" class="text-right">
+                            Tổng giá trị đơn:
+                        </th>
+                        <th class="text-danger font-weight-bold">
+                            @String.Format("{0:N0} VNĐ", Model.Total)
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    }
+    else
+    {
+        <div class="text-center my-5">
+            <h3>Đơn hàng không tồn tại</h3>
+            <p class="text-muted">Không tìm thấy thông tin đơn hàng.</p>
+        </div>
+    }
+    <div class="mt-4">
+        <a href="@Url.Action("Profile", "Account", new { activeTab = "orders" })"
+           class="btn alazea-btn">
+            <i class="fa fa-arrow-left mr-1"></i> Quay lại lịch sử đơn hàng
+        </a>
+    </div>
+
+
+</div>

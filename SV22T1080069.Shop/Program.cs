@@ -96,6 +96,7 @@ ApplicationContext.Configure(
     app.Configuration);
 
 // Khởi tạo cấu hình cho tầng tác nghiệp - Business Layers
-string connectionString = builder.Configuration.GetConnectionString("LiteCommerceDB") ?? throw new Exception("ConnectionString error");
+//string connectionString = builder.Configuration.GetConnectionString("LiteCommerceDB") ?? throw new Exception("ConnectionString error");
+string connectionString = builder.Configuration.GetConnectionString("EcommerceTest") ?? throw new Exception("ConnectionString error");
 SV22T1080069.BusinessLayers.Configuration.Initialize(connectionString);
 app.Run();

@@ -1,0 +1,358 @@
+﻿@* @model PaginationSearchResult<SV22T1080069.DomainModels.Product> *@
+@model ProductSearchResult
+<!-- ##### Breadcrumb Area Start ##### -->
+<div class="breadcrumb-area">
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url('@Url.Content("~/assets/img/bg-img/2b.png")');">
+        <h2>CỬA HÀNG</h2>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Trang chủ</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Cửa hàng</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Breadcrumb Area End ##### -->
+<!-- ##### Shop Area Start ##### -->
+<section class="shop-page section-padding-0-100">
+    <div class="container">
+        <form asp-action="Filter" asp-controller="Shop"
+              method="get" id="filterForm" data-result="#product-list">
+            <div class="row">
+                <div class="col-12">
+                    <div class="shop-sorting-data d-flex flex-wrap align-items-center justify-content-between">
+                        <!-- Shop Page Count -->
+                        <div class="shop-page-count">
+                            <p>Hiện cửa hàng đang có tất cả @Model.RowCount sản phẩm</p>
+                        </div>
+                        <!-- Search box -->
+                        <div class="search-form search-row">
+                            <input type="search"
+                                   class="search-input"
+                                   name="SearchValue"
+                                   value="@(Model.SearchInput?.SearchValue ?? string.Empty)"
+                                   placeholder="Tìm kiếm theo tên cây, loại cây..." />
+                            <button type="submit" class="alazea-btn search-btn">TÌM KIẾM</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Sidebar Area -->
+                <div class="col-12 col-md-4 col-lg-3">
+                    <div class="shop-sidebar-area">
+                                   <!-- Shop Widget: Khoảng giá -->
+                    <div class="shop-widget price mb-50">
+                        <h4 class="widget-title">Khoảng giá</h4>
+                        <div class="widget-desc">
+                            <div class="slider-range">
+                                <div class="slider-range-price"
+     data-min="@Model.MinPriceAll"
+     data-max="@Model.MaxPriceAll"
+     data-start-min="@(Model.SearchInput?.MinPrice == 0 ? Model.MinPriceAll : Model.SearchInput?.MinPrice ?? Model.MinPriceAll)"
+     data-start-max="@(Model.SearchInput?.MaxPrice == 0 ? Model.MaxPriceAll : Model.SearchInput?.MaxPrice ?? Model.MaxPriceAll)">
+</div>
+
+                                <div class="range-price">
+                                    Giá: <span id="price-text"></span>
+                                </div>
+
+                                <input type="hidden" name="MinPrice" id="MinPrice"
+                                       value="@(Model.SearchInput?.MinPrice == 0 ? Model.MinPriceAll : Model.SearchInput?.MinPrice ?? Model.MinPriceAll)" />
+                                <input type="hidden" name="MaxPrice" id="MaxPrice"
+                                       value="@(Model.SearchInput?.MaxPrice == 0 ? Model.MaxPriceAll : Model.SearchInput?.MaxPrice ?? Model.MaxPriceAll)" />
+                            </div>
+                        </div>
+                    </div>
+
+                        <!-- Shop Widget: Danh mục -->
+                        <div class="shop-widget catagory mb-50">
+    <h4 class="widget-title">Danh mục</h4>
+    <div class="widget-desc">
+        <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
+            <input type="checkbox" class="custom-control-input cat-check" id="catAll"
+                   value="0" @(Model.SearchInput != null && Model.SearchInput.CategoryID == 0 ? "checked" : "") />
+            <label class="custom-control-label" for="catAll">
+                Tất cả sản phẩm
+            </label>
+        </div>
+
+        @* Fix CS8604: Ensure Model.Categories is not null before calling .Where *@
+        @foreach (var cat in (Model.Categories ?? Enumerable.Empty<SelectListItem>()).Where(c => c.Value != "0" && c.Text != "--- Chọn loại hàng ---"))
+        {
+            <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
+                <input type="checkbox" class="custom-control-input cat-check"
+                       id="cat_@cat.Value"
+                       value="@cat.Value"
+                       @(Model.SearchInput != null && Model.SearchInput.CategoryID.ToString() == cat.Value ? "checked" : "") />
+                <label class="custom-control-label" for="cat_@cat.Value">
+                    @cat.Text
+                </label>
+            </div>
+        }
+
+        <input type="hidden" name="CategoryID" id="CategoryID" value="@(Model.SearchInput?.CategoryID ?? 0)" />
+    </div>
+</div>
+
+
+                        <!-- Shop Widget: Sort-by (tạm giữ nguyên, chưa xử lý) -->
+                        <div class="shop-widget sort-by mb-50">
+    <h4 class="widget-title">Sắp xếp theo</h4>
+    <div class="widget-desc">
+        <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
+            <input type="checkbox" class="custom-control-input sort-check" id="sortNameAsc"
+                   value="name_asc" @(Model.SearchInput != null && Model.SearchInput.SortBy == "name_asc" ? "checked" : "") />
+            <label class="custom-control-label" for="sortNameAsc">Alphabetically, A-Z</label>
+        </div>
+        <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
+            <input type="checkbox" class="custom-control-input sort-check" id="sortNameDesc"
+                   value="name_desc" @(Model.SearchInput != null && Model.SearchInput.SortBy == "name_desc" ? "checked" : "") />
+            <label class="custom-control-label" for="sortNameDesc">Alphabetically, Z-A</label>
+        </div>
+        <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
+            <input type="checkbox" class="custom-control-input sort-check" id="sortPriceAsc"
+                   value="price_asc" @(Model.SearchInput != null && Model.SearchInput.SortBy == "price_asc" ? "checked" : "") />
+            <label class="custom-control-label" for="sortPriceAsc">Price: low to high</label>
+        </div>
+        <div class="custom-control custom-checkbox d-flex align-items-center">
+            <input type="checkbox" class="custom-control-input sort-check" id="sortPriceDesc"
+                   value="price_desc" @(Model.SearchInput != null && Model.SearchInput.SortBy == "price_desc" ? "checked" : "") />
+            <label class="custom-control-label" for="sortPriceDesc">Price: high to low</label>
+        </div>
+
+        <!-- input ẩn để gửi SortBy -->
+        <input type="hidden" name="SortBy" id="SortBy" value="@(Model.SearchInput?.SortBy ?? "")" />
+    </div>
+</div>
+
+                    <!-- Shop Widget -->
+                    <div class="shop-widget best-seller mb-50">
+                        <h4 class="widget-title">Best Seller</h4>
+                        <div class="widget-desc">
+
+                            <!-- Single Best Seller Products -->
+                            <div class="single-best-seller-product d-flex align-items-center">
+                                <div class="product-thumbnail">
+                                    <a href="@Url.Action("Details", "Shop", new { id = 1 })">
+                                        <img src="~/assets/img/bg-img/4.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="product-info">
+                                    <a href="@Url.Action("Details", "Shop", new { id = 1 })">
+                                        Terrarium sen đá trong kính tròn
+                                    </a>
+                                    <p>350.000 VNĐ</p>
+                                    <div class="ratings">
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Single Best Seller Products -->
+                            <div class="single-best-seller-product d-flex align-items-center">
+                                <div class="product-thumbnail">
+                                    <a href="@Url.Action("Details", "Shop", new { id = 2 })">
+                                        <img src="~/assets/img/bg-img/5.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="product-info">
+                                    <a href="@Url.Action("Details", "Shop", new { id = 2 })">Tulip Flower</a>
+                                    <p>$11.99</p>
+                                    <div class="ratings">
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Single Best Seller Products -->
+                            <div class="single-best-seller-product d-flex align-items-center">
+                                <div class="product-thumbnail">
+                                    <a href="@Url.Action("Details", "Shop", new { id = 3 })">
+                                        <img src="~/assets/img/bg-img/34.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="product-info">
+                                    <a href="@Url.Action("Details", "Shop", new { id = 3 })">Recuerdos Plant</a>
+                                    <p>$9.99</p>
+                                    <div class="ratings">
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+                <div class="col-12 col-md-8 col-lg-9">
+                    <div id="product-list">
+                        @await Html.PartialAsync("_ProductList", Model)
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<!-- ##### Shop Area End ##### -->
+@section Scripts{
+<script>
+    $(function () {
+        // chặn submit form
+        $("#filterForm").on("submit", function (e) {
+            e.preventDefault();
+            loadProducts(1);
+        });
+
+        var $range = $(".slider-range-price");
+        if ($range.length === 0) return;
+
+        var globalMin = parseInt($range.data("min")) || 0;
+        var globalMax = parseInt($range.data("max")) || 0;
+        var startMin  = parseInt($range.data("start-min")) || globalMin;
+        var startMax  = parseInt($range.data("start-max")) || globalMax;
+
+        $range.slider({
+            range: true,
+            min: globalMin,
+            max: globalMax,
+            values: [startMin, startMax],
+            slide: function (event, ui) {
+                var minVal = ui.values[0];
+                var maxVal = ui.values[1];
+
+                $("#MinPrice").val(minVal);
+                $("#MaxPrice").val(maxVal);
+                $("#price-text").text(
+                    minVal.toLocaleString('vi-VN') + " VNĐ - " +
+                    maxVal.toLocaleString('vi-VN') + " VNĐ"
+                );
+            },
+            change: function () {
+                loadProducts(1);   // gọi AJAX, KHÔNG submit form
+            }
+        });
+
+        $("#MinPrice").val(startMin);
+        $("#MaxPrice").val(startMax);
+        $("#price-text").text(
+            startMin.toLocaleString('vi-VN') + " VNĐ - " +
+            startMax.toLocaleString('vi-VN') + " VNĐ"
+        );
+
+        // Danh mục
+        $(".cat-check").on("change", function () {
+            $(".cat-check").not(this).prop("checked", false);
+            $("#CategoryID").val(this.checked ? $(this).val() : 0);
+            loadProducts(1);
+        });
+
+        // Sắp xếp
+        $(".sort-check").on("change", function () {
+            $(".sort-check").not(this).prop("checked", false);
+            $("#SortBy").val(this.checked ? $(this).val() : "");
+            loadProducts(1);
+        });
+    });
+
+    // hàm AJAX giống bên admin
+    function loadProducts(page) {
+        var $form = $("#filterForm");
+        var url = $form.prop("action");        // /Shop/Filter
+        var method = $form.prop("method");     // GET
+        var container = $form.data("result");  // "#product-list"
+
+        var submitData = $form.serializeArray();
+        submitData.push({ name: "Page", value: page });
+
+        $.ajax({
+            url: url,
+            method: method,
+            data: submitData,
+            success: function (html) {
+                $(container).html(html);
+            }
+        });
+    }
+</script>
+}
+
+@* @section Scripts{
+<script>
+    $(function () {
+             $("#filterForm").on("submit", function (e) {
+                e.preventDefault();
+                loadProducts(1);
+            });
+        var $range = $(".slider-range-price");
+    if ($range.length === 0) return;
+
+    var globalMin = parseInt($range.data("min")) || 0;        // min toàn bộ
+    var globalMax = parseInt($range.data("max")) || 0;        // max toàn bộ
+
+    var startMin = parseInt($range.data("start-min")) || globalMin; // min đang chọn
+    var startMax = parseInt($range.data("start-max")) || globalMax; // max đang chọn
+
+    $range.slider({
+        range: true,
+        min: globalMin,
+        max: globalMax,
+        values: [startMin, startMax],
+        slide: function (event, ui) {
+            var minVal = ui.values[0];
+            var maxVal = ui.values[1];
+
+            $("#MinPrice").val(minVal);
+            $("#MaxPrice").val(maxVal);
+            $("#price-text").text(
+                minVal.toLocaleString('vi-VN') + " VNĐ - " +
+                maxVal.toLocaleString('vi-VN') + " VNĐ"
+            );
+        },
+        change: function () {
+            $("#filterForm").submit();
+        }
+    });
+
+    $("#MinPrice").val(startMin);
+    $("#MaxPrice").val(startMax);
+    $("#price-text").text(
+        startMin.toLocaleString('vi-VN') + " VNĐ - " +
+        startMax.toLocaleString('vi-VN') + " VNĐ"
+    );
+        // Danh mục
+        $(".cat-check").on("change", function () {
+            $(".cat-check").not(this).prop("checked", false);
+            $("#CategoryID").val(this.checked ? $(this).val() : 0);
+            $("#filterForm").submit();
+        });
+
+        // Sắp xếp
+        $(".sort-check").on("change", function () {
+            $(".sort-check").not(this).prop("checked", false);
+            $("#SortBy").val(this.checked ? $(this).val() : "");
+            $("#filterForm").submit();
+        });
+    });
+</script>
+} *@
+

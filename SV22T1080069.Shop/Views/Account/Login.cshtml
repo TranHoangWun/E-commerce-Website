@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Đăng nhập";
+    var returnUrl = ViewBag.ReturnUrl as string;
+}
+
+<!-- ##### Breadcrumb ##### -->
+<div class="breadcrumb-area">
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url(/assets/img/bg-img/2b.png);">
+        <h2>ĐĂNG NHẬP</h2>
+    </div>
+</div>
+
+<div class="auth-page">
+    <div class="auth-card">
+        <h2 class="auth-title">Đăng nhập</h2>
+        <p class="auth-subtitle">Chào mừng trở lại khu vườn nhỏ của bạn.</p>
+
+        @* Hiện lỗi ModelState["Error"] nếu có *@
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+            </div>
+        }
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Success"]
+            </div>
+        }
+
+        <form asp-action="Login"
+              asp-controller="Account"
+              method="post"
+              class="auth-form">
+            @* returnUrl để sau login quay lại trang trước *@
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+            <div class="form-group">
+                <label for="login-username">Tên đăng nhập</label>
+                <input type="text"
+                       id="login-username"
+                       name="username"
+                       class="form-control"
+                       placeholder="Nhập tên đăng nhập"
+                       value="@ViewBag.UserName"
+                       required />
+            </div>
+
+            <div class="form-group">
+                <label for="login-password">Mật khẩu</label>
+                <input type="password"
+                       id="login-password"
+                       name="password"
+                       class="form-control"
+                       placeholder="Nhập mật khẩu"
+                       required />
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3 auth-checkbox">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="remember">
+                    <label class="custom-control-label" for="remember">Ghi nhớ đăng nhập</label>
+                </div>
+                <a href="#" style="font-size:13px;">Quên mật khẩu?</a>
+            </div>
+
+            <button type="submit" class="alazea-btn">Đăng nhập</button>
+
+            <p class="auth-extra">
+                Chưa có tài khoản?
+                <a asp-controller="Account" asp-action="Register">Đăng ký ngay</a>
+            </p>
+        </form>
+    </div>
+</div>

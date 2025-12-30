@@ -71,7 +71,7 @@ namespace SV22T1080069.DataLayers
         /// </summary>
         /// <param name="supplierID"></param>
         /// <returns></returns>
-        public async Task<Supplier> GetAsync(int supplierID)
+        public async Task<Supplier?> GetAsync(int supplierID)
         {
             using (var connection = await OpenConnectionAsync())
             {
@@ -80,7 +80,6 @@ namespace SV22T1080069.DataLayers
                 {
                     supplierID
                 };
-                var data = await connection.QueryAsync<Supplier>(sql: sql, param: parameters, commandType: System.Data.CommandType.Text);
                 return await connection.QueryFirstOrDefaultAsync<Supplier>(sql: sql, param: parameters, commandType: CommandType.Text);
             }
         }
@@ -140,7 +139,7 @@ namespace SV22T1080069.DataLayers
             }
         }
         /// <summary>
-        /// Xóa một nhà cung cấp dựa vào mã nhà cung cấp
+        /// Xóa một nhà cung cấp dựa vao mã nhà cung cấp
         /// </summary>
         /// <param name="supplierID"></param>
         /// <returns></returns>

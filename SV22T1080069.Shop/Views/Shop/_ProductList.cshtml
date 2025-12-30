@@ -1,0 +1,223 @@
+﻿@model ProductSearchResult
+<div class="shop-page-count">
+    <p>Hiển thị @Model.Data.Count() trên tổng số @Model.RowCount sản phẩm</p>
+</div>
+
+ <!-- All Products Area -->
+                    <div class="shop-products-area">
+                        <div class="row">
+
+                            @foreach (var item in Model.Data)
+                            {
+                                var imgUrl = string.IsNullOrEmpty(item.Photo)
+                                ? ApplicationContext.ProductImagePath + "nophoto.png"
+                                : ApplicationContext.ProductImagePath + item.Photo;
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <div class="single-product-area mb-50">
+                                        <div class="product-img">
+                                            <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })">
+                                                @* <img src="~/images/products/@item.Photo" alt="@item.ProductName" /> *@
+                                                    <img src="@imgUrl" alt="@item.ProductName" />
+                                            </a>
+                                            <div class="product-meta d-flex">
+                                                @* <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a> *@
+                                                 <a href="@Url.Action("Wishlist", "Account", new { id = item.ProductID })"
+                                                    class="wishlist-btn"><i class="icon_heart_alt"></i></a>
+                                                @* <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })"
+                                                   class="add-to-cart-btn">Thêm vào giỏ</a> *@
+                                                @* <a asp-controller="Cart" asp-action="Add" asp-route-id="@item.ProductID" class="btn alazea-btn">
+                                                    Thêm vào giỏ
+                                                </a> *@
+                                                <a href="javascript:void(0)" class="add-to-cart-btn" data-id="@item.ProductID">
+                                                    Thêm vào giỏ
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="product-info mt-15 text-center">
+                                            <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })">
+                                                <p>@item.ProductName</p>
+                                            </a>
+                                            <h6>@item.Price.ToString("N0") VNĐ</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+    @{
+        var pageCount = (int)Math.Ceiling((double)Model.RowCount / Model.PageSize);
+        var current = Model.Page;
+        var startPage = Math.Max(1, current - 1);
+        var endPage = Math.Min(pageCount, current + 1);
+    }
+
+    <nav aria-label="Page navigation" class="d-flex justify-content-center mt-1">
+        <ul class="pagination">
+
+            <!-- Previous -->
+            <li class="page-item @(current == 1 ? "disabled" : "")">
+                <a class="page-link" aria-label="Previous"
+                   href="javascript:void(0);"
+                   onclick="if(@current > 1) loadProducts(@(current - 1));">
+                    <span aria-hidden="true">&lt;</span>
+                </a>
+            </li>
+
+            @if (startPage > 1)
+            {
+                <li class="page-item @(current == 1 ? "active" : "")">
+                    <a class="page-link"
+                       href="javascript:void(0);"
+                       onclick="loadProducts(1)">
+                        1
+                    </a>
+                </li>
+                @if (startPage > 2)
+                {
+                    <li class="page-item disabled"><span class="page-link">…</span></li>
+                }
+            }
+
+            @for (int p = startPage; p <= endPage; p++)
+            {
+                <li class="page-item @(p == current ? "active" : "")">
+                    <a class="page-link"
+                       href="javascript:void(0);"
+                       onclick="loadProducts(@p)">
+                        @p
+                    </a>
+                </li>
+            }
+
+            @if (endPage < pageCount)
+            {
+                if (endPage < pageCount - 1)
+                {
+                    <li class="page-item disabled"><span class="page-link">…</span></li>
+                }
+                <li class="page-item @(current == pageCount ? "active" : "")">
+                    <a class="page-link"
+                       href="javascript:void(0);"
+                       onclick="loadProducts(@pageCount)">
+                        @pageCount
+                    </a>
+                </li>
+            }
+
+            <!-- Next -->
+            <li class="page-item @(current == pageCount || pageCount == 0 ? "disabled" : "")">
+                <a class="page-link" aria-label="Next"
+                   href="javascript:void(0);"
+                   onclick="if(@current < @pageCount) loadProducts(@(current + 1));">
+                    <span aria-hidden="true">&gt;</span>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+                    </div>
+               
+@* @{
+                            var pageCount = (int)Math.Ceiling((double)Model.RowCount / Model.PageSize);
+                            var current = Model.Page;
+                            var startPage = Math.Max(1, current - 1);
+                            var endPage = Math.Min(pageCount, current + 1);
+                        }
+
+                        <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
+                            <ul class="pagination">
+
+                                <!-- Previous -->
+                                <li class="page-item @(current == 1 ? "disabled" : "")">
+                                    <a class="page-link" aria-label="Previous"
+                                       href="@(current == 1 ? "#" : Url.Action("Index", "Shop", new {
+                                            Page = current - 1,
+                                            PageSize = Model.PageSize,
+                                            SearchValue = Model.SearchInput.SearchValue,
+                                            CategoryID = Model.SearchInput.CategoryID,
+                                            SupplierID = Model.SearchInput.SupplierID,
+                                            MinPrice = Model.SearchInput.MinPrice,
+                                            MaxPrice = Model.SearchInput.MaxPrice
+                                       }))">
+                                        <span aria-hidden="true">&lt;</span>
+                                    </a>
+                                </li>
+
+                                @if (startPage > 1)
+                                {
+                                    <li class="shop-products-area page-item @(current == 1 ? "active" : "")">
+                                        <a class="page-link"
+                                           href="@Url.Action("Index", "Shop", new {
+                                                Page = 1,
+                                                PageSize = Model.PageSize,
+                                                SearchValue = Model.SearchInput.SearchValue,
+                                                CategoryID = Model.SearchInput.CategoryID,
+                                                SupplierID = Model.SearchInput.SupplierID,
+                                                MinPrice = Model.SearchInput.MinPrice,
+                                                MaxPrice = Model.SearchInput.MaxPrice
+                                           })">1</a>
+                                    </li>
+                                    @if (startPage > 2)
+                                    {
+                                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                                    }
+                                }
+
+                                @for (int p = startPage; p <= endPage; p++)
+                                {
+                                    <li class="shop-products-area page-item @(p == current ? "active" : "")">
+                                        <a class="page-link"
+                                           href="@Url.Action("Index", "Shop", new {
+                                                Page = p,
+                                                PageSize = Model.PageSize,
+                                                SearchValue = Model.SearchInput.SearchValue,
+                                                CategoryID = Model.SearchInput.CategoryID,
+                                                SupplierID = Model.SearchInput.SupplierID,
+                                                MinPrice = Model.SearchInput.MinPrice,
+                                                MaxPrice = Model.SearchInput.MaxPrice
+                                           })">
+                                            @p
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (endPage < pageCount)
+                                {
+                                    if (endPage < pageCount - 1)
+                                    {
+                                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                                    }
+                                    <li class="shop-products-area page-item @(current == pageCount ? "active" : "")">
+                                        <a class="page-link"
+                                           href="@Url.Action("Index", "Shop", new {
+                                                Page = pageCount,
+                                                PageSize = Model.PageSize,
+                                                SearchValue = Model.SearchInput.SearchValue,
+                                                CategoryID = Model.SearchInput.CategoryID,
+                                                SupplierID = Model.SearchInput.SupplierID,
+                                                MinPrice = Model.SearchInput.MinPrice,
+                                                MaxPrice = Model.SearchInput.MaxPrice
+                                           })">
+                                            @pageCount
+                                        </a>
+                                    </li>
+                                }
+                                <!-- Next -->
+                                <li class="page-item @(current == pageCount || pageCount == 0 ? "disabled" : "")">
+                                    <a class="page-link" aria-label="Next"
+                                       href="@(current == pageCount || pageCount == 0 ? "#" : Url.Action("Index", "Shop", new {
+                                            Page = current + 1,
+                                            PageSize = Model.PageSize,
+                                            SearchValue = Model.SearchInput.SearchValue,
+                                            CategoryID = Model.SearchInput.CategoryID,
+                                            SupplierID = Model.SearchInput.SupplierID,
+                                            MinPrice = Model.SearchInput.MinPrice,
+                                            MaxPrice = Model.SearchInput.MaxPrice
+                                       }))">
+                                        <span aria-hidden="true">&gt;</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </nav> *@

@@ -59,6 +59,71 @@ namespace SV22T1080069.DataLayers
             return await connection.QueryAsync<Product>(sql: sql, param: parameters, commandType: System.Data.CommandType.Text);
         }
         /// <summary>
+        /// Danh sách mặt hàng có sắp xếp theo yêu cầu
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchValue"></param>
+        /// <param name="categoryID"></param>
+        /// <param name="supplierID"></param>
+        /// <param name="minPrice"></param>
+        /// <param name="maxPrice"></param>
+        /// <param name="sortBy"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Product>> ListSortedAsync(
+                    int page = 1, int pageSize = 0,
+                    string searchValue = "",
+                    int categoryID = 0, int supplierID = 0,
+                    decimal minPrice = 0, decimal maxPrice = 0,
+                    string sortBy = ""
+                            )
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 0) pageSize = 0;
+            searchValue = $"%{searchValue}%";
+
+            var orderClause = sortBy switch
+            {
+                "name_asc" => "ProductName ASC",
+                "name_desc" => "ProductName DESC",
+                "price_asc" => "Price ASC",
+                "price_desc" => "Price DESC",
+                _ => "ProductName ASC"
+            };
+
+            using var connection = await OpenConnectionAsync();
+
+            var sql = $@"
+    WITH cte AS (
+        SELECT *,
+               ROW_NUMBER() OVER(ORDER BY {orderClause}) AS RowNumber
+        FROM Products
+        WHERE (ProductName LIKE @SearchValue)
+          AND (@CategoryID = 0 OR CategoryID = @CategoryID)
+          AND (@SupplierID = 0 OR SupplierId = @SupplierID)
+          AND (Price >= @MinPrice)
+          AND (@MaxPrice <= 0 OR Price <= @MaxPrice)
+    )
+    SELECT *
+    FROM cte
+    WHERE (@PageSize = 0)
+       OR (RowNumber BETWEEN (@Page - 1)*@PageSize + 1 AND @Page * @PageSize);";
+
+            var parameters = new
+            {
+                Page = page,
+                PageSize = pageSize,
+                SearchValue = searchValue ?? "",
+                CategoryID = categoryID,
+                SupplierID = supplierID,
+                MinPrice = minPrice,
+                MaxPrice = maxPrice
+            };
+
+            return await connection.QueryAsync<Product>(sql, parameters);
+        }
+
+        /// <summary>
         /// Đếm số lượng
         /// </summary>
         /// <param name="searchValue"></param>
@@ -404,6 +469,36 @@ namespace SV22T1080069.DataLayers
 
             var rows = await connection.ExecuteAsync(sql, parameters);
             return rows > 0;
+        }
+        /// <summary>
+        /// Lấy giá nhỏ nhất trong bảng Products
+        /// </summary>
+        /// <returns></returns>
+        public async Task<decimal> GetMinPriceAsync()
+        {
+            using var connection = await OpenConnectionAsync();
+            var sql = @"SELECT ISNULL(MIN(Price), 0) FROM Products;";
+            return await connection.ExecuteScalarAsync<decimal>(sql, commandType: System.Data.CommandType.Text);
+        }
+        /// <summary>
+        /// Lấy giá lớn nhất trong bảng Products
+        /// </summary>
+        /// <returns></returns>
+        public async Task<decimal> GetMaxPriceAsync()
+        {
+            using var connection = await OpenConnectionAsync();
+            var sql = @"SELECT ISNULL(MAX(Price), 0) FROM Products;";
+            return await connection.ExecuteScalarAsync<decimal>(sql, commandType: System.Data.CommandType.Text);
+        }
+        public async Task<IEnumerable<Product>> TopProductsByPriceAsync(int top = 4)
+        {
+            using var connection = await OpenConnectionAsync();
+            var sql = @"
+        SELECT TOP (@Top) *
+        FROM Products
+        ORDER BY Price DESC;";          // TOP N + ORDER BY [web:49]
+
+            return await connection.QueryAsync<Product>(sql, new { Top = top });
         }
 
     }

@@ -1,0 +1,104 @@
+﻿@model List<SV22T1080069.Shop.Models.CartItem>
+
+@{
+    decimal subtotal = Model.Sum(x => x.Total);
+}
+
+@if (!Model.Any())
+{
+    <div class="row">
+        <div class="col-12 text-center py-5">
+            <h4>Giỏ hàng của bạn đang trống</h4>
+            <p>Hãy tiếp tục mua sắm để thêm sản phẩm vào giỏ.</p>
+            <a href="@Url.Action("Index", "Shop")" class="btn alazea-btn mt-3">
+                Tiếp tục mua sắm
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="cart-table clearfix">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Tổng</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var imgUrl = ApplicationContext.ProductImagePath + item.Photo;
+                    <tr>
+                        <td class="cart_product_img">
+                            <div class="d-flex align-items-center">
+                                <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })"
+                                   class="cart-thumb me-3">
+                                    <img src="@imgUrl" alt="@item.ProductName" />
+                                </a>
+                                <h5>@item.ProductName</h5>
+                            </div>
+                        </td>
+
+                        <td class="qty">
+                            <div class="quantity d-flex">
+                                <span class="qty-minus" data-id="@item.CartItemID">
+                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                </span>
+                                <input type="number" class="qty-text"
+                                       data-id="@item.CartItemID"
+                                       min="1" max="99" value="@item.Quantity" />
+                                <span class="qty-plus" data-id="@item.CartItemID">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="price"><span>@item.UnitPrice.ToString("N0") đ</span></td>
+                        <td class="total_price"><span>@item.Total.ToString("N0") đ</span></td>
+                        <td class="action">
+                            <a href="javascript:void(0)" class="cart-remove"
+                               data-id="@item.CartItemID" title="Xóa sản phẩm">
+                                <i class="icon_close"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-right mt-3">
+            <a href="javascript:void(0)" id="cart-clear"
+               class="btn btn-outline-danger btn-sm px-3">
+                Xóa toàn bộ giỏ hàng
+            </a>
+        </div>
+    </div>
+
+    <!-- Tổng tiền -->
+    <div class="row">
+        <div class="col-12 col-lg-6"></div>
+        <div class="col-12 col-lg-6">
+            <div class="cart-totals-area mt-70">
+                <h5 class="title--">Tổng giỏ hàng</h5>
+                <div class="subtotal d-flex justify-content-between">
+                    <h5>Tạm tính</h5>
+                    <h5>@subtotal.ToString("N0") đ</h5>
+                </div>
+                <div class="total d-flex justify-content-between">
+                    <h5>Tổng cộng</h5>
+                    <h5>@subtotal.ToString("N0") đ</h5>
+                </div>
+                <div class="checkout-btn">
+                    <a href="@Url.Action("Checkout", "Order")" class="btn alazea-btn w-100">
+                        Tiến hành thanh toán
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

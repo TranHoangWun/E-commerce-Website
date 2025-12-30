@@ -116,5 +116,15 @@ namespace SV22T1080069.Shop
             _configuration?.GetSection(name).Bind(value);
             return value;
         }
+        /// <summary>
+        /// Lấy đường dẫn lưu ảnh sản phẩm từ cấu hình appsettings.json
+        /// </summary>
+        public static string ProductImagePath => GetConfigValue("ProductImagePath");
+        public static string CustomerImagePath => GetConfigValue("CustomerImagePath");
+        /// <summary>
+        /// Dùng để lưu ảnh khách hàng lên ổ đĩa vật lý theo cấu hình trong appsettings.json
+        /// </summary>
+        public static string CustomerImagePhysicalPath => GetConfigValue("CustomerImagePhysicalPath");
+
     }
 }

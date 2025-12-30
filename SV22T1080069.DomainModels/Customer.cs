@@ -44,5 +44,9 @@ namespace SV22T1080069.DomainModels
         /// </summary>
         public bool IsLocked    { get; set; }
         // mật khẩu không cần thiết vì không hiển thị ra ngoài
+        /// <summary>
+        /// Ảnh đại diện của khách hàng
+        /// </summary>
+        public string Photo { get; set; } = "";
     }
 }

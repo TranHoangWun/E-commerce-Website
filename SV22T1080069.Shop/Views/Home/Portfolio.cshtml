@@ -1,0 +1,309 @@
+﻿<!-- ##### Breadcrumb Area Start ##### -->
+<div class="breadcrumb-area">
+    <!-- Top Breadcrumb Area -->
+    @* <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url(assets/img/bg-img/3b.jpg);">
+        <h2>PORTFOLIO</h2>
+    </div> *@
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url('@Url.Content("~/assets/img/bg-img/3b.jpg")');">
+        <h2>PORTFOLIO</h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Portfolio</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Breadcrumb Area End ##### -->
+<!-- ##### Portfolio Area Start ##### -->
+<section class="alazea-portfolio-area section-padding-100-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Section Heading -->
+                <div class="section-heading text-center">
+                    <h2>OUR PORTFOLIO</h2>
+                    <p>Chúng tôi có những sản phẩm phù hợp cho không gian của bạn</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="alazea-portfolio-filter">
+                    <div class="portfolio-filter">
+                        <button class="btn active" data-filter="*">Tất cả</button>
+                        <button class="btn" data-filter=".design">Trang trí quán</button>
+                        <button class="btn" data-filter=".garden">Vườn của bạn</button>
+                        <button class="btn" data-filter=".home-design">Trong nhà</button>
+                        <button class="btn" data-filter=".office-design">Terrarium</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row alazea-portfolio">
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item design home-design wow fadeInUp"
+                 data-wow-delay="100ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img"
+                     style="background-image: url('@Url.Content("~/assets/img/bg-img/16.jpg")');"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="@Url.Content("~/assets/img/bg-img/16.jpg")"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 1">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item garden wow fadeInUp" data-wow-delay="200ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/17.jpg")');"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/17.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 2">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item garden design wow fadeInUp"
+                 data-wow-delay="300ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/18.jpg")');"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/18.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 3">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item garden office-design wow fadeInUp"
+                 data-wow-delay="400ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/19.jpg")');"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/19.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 4">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item design office-design wow fadeInUp"
+                 data-wow-delay="100ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/20.jpg")');"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/20.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 5">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item garden wow fadeInUp" data-wow-delay="200ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/21.jpg")');"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/21.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 6">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-lg-6 single_portfolio_item home-design wow fadeInUp" data-wow-delay="300ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/22.jpg")');"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/22.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 7">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- ##### Portfolio Area End ##### -->
+<!-- ##### Portfolio Details Area Start ##### -->
+<br>
+<section class="portfolio-details-area section-padding-0-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Section Heading -->
+                <div class="section-heading text-center">
+                    <h2>GÓC LÀM VIỆC XANH NHÀ ANH MINH</h2>
+                    <p>Thiết kế &amp; thực hiện bởi HoaMuaHa Secret Garden.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="portfolio-text mb-100">
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <h5>Giới thiệu dự án</h5>
+                    <p>
+                        Dự án này được thực hiện cho một căn hộ chung cư tại Huế, với yêu cầu tạo một góc làm việc
+                        nhỏ nhưng tràn đầy năng lượng xanh. Chúng tôi sử dụng xương rồng, cây mọng nước và một số
+                        cây nội thất dễ chăm để phù hợp với lịch làm việc bận rộn.
+                    </p>
+                    <p>
+                        Bố cục được thiết kế sao cho ánh sáng tự nhiên được tận dụng tối đa, kết hợp thêm tiểu cảnh
+                        Terrarium đặt trên bàn để mang cảm giác một khu vườn thu nhỏ ngay cạnh máy tính. Tông màu
+                        chậu và phụ kiện được chọn theo gam gỗ – trắng, tạo cảm giác nhẹ nhàng và hiện đại.
+                    </p>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <h5>Ý tưởng chính &amp; chi tiết</h5>
+                    <p>
+                        Điểm nhấn của dự án là sự kết hợp giữa cây dáng đứng, cây rủ và Terrarium, giúp không gian
+                        nhỏ nhưng vẫn có chiều sâu và nhiều lớp xanh. Các loại cây đều được chọn theo tiêu chí
+                        dễ sống trong nhà, ít cần tưới và chịu được điều hòa.
+                    </p>
+                    <ul>
+                        <li>
+                            <i class="fa fa-check"></i> Sử dụng combo xương rồng &amp; cây mọng nước cho kệ sách,
+                            tạo cảm giác sa mạc thu nhỏ.
+                        </li>
+                        <li>
+                            <i class="fa fa-check"></i> Bố trí một Terrarium kính tròn trên bàn, mang hình ảnh khu
+                            vườn mini thư giãn.
+                        </li>
+                        <li>
+                            <i class="fa fa-check"></i> Chọn cây nội thất lá xanh đậm đặt ở góc phòng để cân bằng độ
+                            ẩm và làm mềm không gian.
+                        </li>
+                        <li>
+                            <i class="fa fa-check"></i> Tư vấn cách chăm sóc đơn giản để khách có thể duy trì góc
+                            xanh lâu dài.
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-12">
+                    <h5>Yêu cầu từ khách hàng</h5>
+                    <p>
+                        Khách hàng mong muốn có một góc làm việc gọn gàng, không tốn quá nhiều thời gian chăm sóc
+                        nhưng vẫn thể hiện được cá tính yêu thiên nhiên. Ngân sách ở mức vừa phải, ưu tiên các loại
+                        cây dễ tìm, dễ thay thế khi cần, và có thể mở rộng thêm cây hoặc Terrarium về sau mà không
+                        phá vỡ bố cục hiện tại.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Portfolio Slides -->
+        <div class="portfolio-slides owl-carousel mb-100">
+            <!-- Single Portfolio Slide -->
+            <div class="single-portfolio-slide">
+                <img src="~/assets/img/bg-img/26.jpg" alt="">
+            </div>
+            <!-- Single Portfolio Slide -->
+            <div class="single-portfolio-slide">
+                <img src="~/assets/img/bg-img/27.jpg" alt="">
+            </div>
+            <!-- Single Portfolio Slide -->
+            <div class="single-portfolio-slide">
+                <img src="~/assets/img/bg-img/28.jpg" alt="">
+            </div>
+        </div>
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-12 col-lg-8">
+                    <h5>Quy trình thực hiện</h5>
+                    <p class="mb-30">
+                        Sau khi khảo sát không gian và nguồn sáng, chúng tôi đề xuất sơ đồ bố trí cây cho từng vị
+                        trí: bàn làm việc, kệ sách và góc phòng. Khách hàng lựa chọn loại cây ưa thích, sau đó đội ngũ
+                        tiến hành phối chậu, phối đá trang trí và set up trọn bộ trong một buổi chiều.
+                    </p>
+                    <h5>Lựa chọn cây &amp; Terrarium</h5>
+                    <p class="mb-30">
+                        Các loại cây được ưu tiên là xương rồng, sen đá, cây mọng nước và một số cây nội thất chịu
+                        bóng như trầu bà, lưỡi hổ. Terrarium được thiết kế riêng với lớp đất, sỏi, than hoạt tính và rêu,
+                        tạo nên một hệ sinh thái thu nhỏ, ít cần tưới và rất phù hợp đặt trong phòng làm việc.
+                    </p>
+                    <h5>Bàn giao &amp; bảo hành</h5>
+                    <p>
+                        Sau khi hoàn thiện, khách hàng được hướng dẫn chăm sóc chi tiết và nhận bảo hành cây trong
+                        vòng 7–14 ngày tùy loại. Trong thời gian này, nếu cây gặp vấn đề do kỹ thuật trồng, chúng
+                        tôi sẽ hỗ trợ thay thế hoặc xử lý miễn phí.
+                    </p>
+                </div>
+
+                <div class="col-12 col-lg-3">
+                    <div class="portfolio-details-meta">
+                        <h5>Thời gian thực hiện</h5>
+                        <p>10/03/2025 - 20/03/2025</p>
+                    </div>
+                    <div class="portfolio-details-meta">
+                        <h5>Khách hàng</h5>
+                        <p>Anh Minh (căn hộ chung cư)</p>
+                    </div>
+                    <div class="portfolio-details-meta">
+                        <h5>Loại dự án</h5>
+                        <p>Trang trí góc làm việc, cây nội thất &amp; Terrarium</p>
+                    </div>
+                    <div class="portfolio-details-meta">
+                        <h5>Thực hiện</h5>
+                        <p>HoaMuaHa Secret Garden Team</p>
+                    </div>
+                    <div class="portfolio-details-meta">
+                        <h5>Giá trị hợp đồng</h5>
+                        <p>6.500.000 VNĐ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+<!-- ##### Portfolio Details Area End ##### --> 

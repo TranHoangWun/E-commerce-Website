@@ -138,7 +138,7 @@ namespace SV22T1080069.Admin.Controllers
                 }
                 return View(model);                                             // truyền model để hiển thị thông tin người giao hàng cần xóa
             }
-            return View();
+            //return View();
         }
     }
 }

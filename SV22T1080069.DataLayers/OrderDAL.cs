@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using SV22T1080069.DataLayers;
 using SV22T1080069.DomainModels;
 
 namespace SV22T1080069.DataLayers.SQLServer
@@ -368,6 +367,27 @@ namespace SV22T1080069.DataLayers.SQLServer
                 StatusAccepted = Constants.ORDER_ACCEPTED // 2
             };
             return (await connection.ExecuteAsync(sql: sql, param: parameters, commandType: System.Data.CommandType.Text)) > 0;
+        }
+        /// <summary>
+        /// Cập nhật nhân viên phụ trách đơn hàng
+        /// </summary>
+        public async Task<bool> UpdateEmployeeAsync(int orderID, int? employeeID)
+        {
+            using var connection = await OpenConnectionAsync();
+            var sql = @"update Orders
+                set EmployeeID = @EmployeeID
+                where OrderID = @OrderID";
+
+            var parameters = new
+            {
+                OrderID = orderID,
+                EmployeeID = employeeID
+            };
+
+            return (await connection.ExecuteAsync(
+                sql: sql,
+                param: parameters,
+                commandType: System.Data.CommandType.Text)) > 0;
         }
     }
 }

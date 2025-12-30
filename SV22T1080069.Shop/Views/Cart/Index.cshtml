@@ -1,0 +1,117 @@
+﻿@model List<SV22T1080069.Shop.Models.CartItem>
+
+@{
+    decimal subtotal = Model.Sum(x => x.Total);
+}
+
+<!-- ##### Breadcrumb Area Start ##### -->
+<div class="breadcrumb-area">
+    <!-- Top Breadcrumb Area -->
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url(assets/img/bg-img/4b.jpg);">
+        <h2>Giỏ hàng</h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href ="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Trang chủ </a></li>
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Shop")">Cửa hàng</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Breadcrumb Area End ##### -->
+<div class="cart-area section-padding-0-100 clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div id="cart-wrapper">
+                    @await Html.PartialAsync("_CartTable", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function bindCartEvents() {
+            // tăng giảm
+            document.querySelectorAll('.qty-minus, .qty-plus').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const id = this.dataset.id;
+                    const input = document.querySelector('.qty-text[data-id="' + id + '"]');
+                    let v = parseInt(input.value || 1, 10);
+                    v += this.classList.contains('qty-plus') ? 1 : -1;
+                    if (v < 1 || v > 99) return;
+                    updateCart(id, v);
+                });
+            });
+
+            // xóa 1 dòng
+            // document.querySelectorAll('.cart-remove').forEach(btn => {
+            //     btn.addEventListener('click', function () {
+            //         const id = this.dataset.id;
+            //         updateCart(id, 0); 0 = remove
+            //     });
+            // });
+        document.querySelectorAll('.cart-remove').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.dataset.id;
+                if (!confirm('Xóa sản phẩm này khỏi giỏ?')) return;
+
+                fetch('/Cart/Remove', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+                    body: 'cartItemId=' + encodeURIComponent(id)
+                })
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('cart-wrapper').innerHTML = html;
+                    bindCartEvents();
+                });
+            });
+        });
+                    // xóa toàn bộ
+        const clearBtn = document.getElementById('cart-clear');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function () {
+                if (!confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng không?')) {
+                    return; // bấm Cancel thì không gọi API
+                }
+
+                fetch('/Cart/Clear', { method: 'POST' })
+                    .then(r => r.text())
+                    .then(html => {
+                        // nếu Clear trả về _CartTable với Model rỗng, trong đó có "Giỏ hàng của bạn đang trống"
+                        document.getElementById('cart-wrapper').innerHTML = html;
+                        bindCartEvents();
+                       
+                    })
+                    .catch(err => console.error('Clear cart error', err));
+            });
+        }
+        }
+        function updateCart(cartItemId, quantity) {
+            fetch('/Cart/Update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+                body: 'cartItemId=' + encodeURIComponent(cartItemId) +
+                      '&quantity=' + encodeURIComponent(quantity)
+            })
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('cart-wrapper').innerHTML = html;
+                bindCartEvents();
+            });
+        }
+        document.addEventListener('DOMContentLoaded', bindCartEvents);
+              
+    </script>
+}
+

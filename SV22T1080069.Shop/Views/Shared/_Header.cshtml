@@ -1,0 +1,190 @@
+﻿@using SV22T1080069.BusinessLayers;
+@using SV22T1080069.DomainModels;
+@using SV22T1080069.Shop;
+
+@{
+    var cartCount = 0;
+    if (User.Identity.IsAuthenticated)
+    {
+        var user = User.GetUserData();
+        if (user != null && int.TryParse(user.UserId, out var customerId))
+        {
+            var itemsDb = await CartDataService.ListCartAsync(customerId);
+            cartCount = itemsDb.Sum(x => x.Quantity);
+        }
+    }
+}
+<!-- ##### Header Area Start ##### -->
+<header class="header-area">
+
+    <!-- ***** Top Header Area ***** -->
+    <div class="top-header-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="top-header-content d-flex align-items-center justify-content-between">
+                        <!-- Top Header Content -->
+                        <div class="top-header-meta">
+                            <a href="#" data-toggle="tooltip" data-placement="bottom"
+                               title="infodeercreative@gmail.com">
+                                <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                <span>Email: 22T1080069@husc.edu.vn</span>
+                            </a>
+                        </div>
+
+                        <!-- Top Header Content -->
+                        <div class="top-header-meta d-flex">
+                            @if (User.Identity != null && User.Identity.IsAuthenticated)
+                            {
+                                var user = User.GetUserData();
+                                string avatarUrl = string.IsNullOrEmpty(user?.Photo)
+                                ? ApplicationContext.CustomerImagePath + "nophoto.png"
+                                : ApplicationContext.CustomerImagePath + user.Photo;
+                                <!-- User info -->
+                                <div class="login d-flex align-items-center mr-3">
+                                    <a href="@Url.Action("Profile", "Account")" class="d-flex align-items-center">
+                                        <img src="@avatarUrl"
+                                             alt="avatar"
+                                             style="width:32px;height:32px;border-radius:50%;object-fit:cover;margin-right:8px;" />
+                                        <span>@user?.DisplayName</span>
+                                    </a>
+                                </div>
+
+
+                                @* <!-- Logout -->
+                                <div class="login mr-3">
+                                    <a href="@Url.Action("Logout", "Account")">
+                                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                        <span>Đăng xuất</span>
+                                    </a>
+                                </div> *@
+                                                        }
+                            else
+                            {
+                                <!-- Login when not authenticated -->
+                                <div class="login mr-3">
+                                    <a href="@Url.Action("Login", "Account")">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        <span>Đăng nhập</span>
+                                    </a>
+                                </div>
+                            }
+
+                            <!-- Cart: luôn hiển thị icon, nhưng controller sẽ chặn nếu chưa đăng nhập -->
+                            @* <div class="cart">
+                                <a href="@Url.Action("Index", "Cart")">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    <span>Giỏ hàng <span class="cart-quantity">(1)</span></span>
+                                </a>
+                            </div> *@
+                            <div class="cart">
+                                <a href="@Url.Action("Index", "Cart")">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    <span>Giỏ hàng <span id="cart-quantity">(@cartCount)</span></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ***** Navbar Area ***** -->
+    <div class="alazea-main-menu">
+        <div class="classy-nav-container breakpoint-off">
+            <div class="container">
+                <!-- Menu -->
+                <nav class="classy-navbar justify-content-between" id="alazeaNav">
+
+                    <!-- Nav Brand -->
+                    <a href="@Url.Action("Index", "Home")" class="nav-brand">
+                        <img src="~/assets/img/core-img/HMH2.png" alt="" />
+                    </a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+
+                        <!-- Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Navbar Start -->
+                        <div class="classynav">
+                            <ul>
+                                <li>
+                                    <a href="@Url.Action("Index", "Home")">Trang chủ</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("About", "Home")">Giới thiệu</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "Shop")">Cửa hàng</a>
+                                    <ul class="dropdown">
+                                        <li>
+                                            <a href="@Url.Action("Index", "Shop")">Danh mục</a>
+                                            <ul class="dropdown">
+                                                <li><a href="@Url.Action("Index", "Shop", new { category = "cay-xuong-rong" })">Cây xương rồng</a></li>
+                                                <li><a href="@Url.Action("Index", "Shop", new { category = "cay-mong-nuoc" })">Cây mọng nước</a></li>
+                                                <li><a href="@Url.Action("Index", "Shop", new { category = "cay-noi-that" })">Cây nội thất</a></li>
+                                                <li><a href="@Url.Action("Index", "Shop", new { category = "terrarium" })">Tiểu cảnh Terrarium</a></li>
+                                                <li><a href="@Url.Action("Index", "Shop", new { category = "phu-kien" })">Phụ kiện Terrarium</a></li>
+                                                <li><a href="@Url.Action("Index", "Shop", new { category = "chau-cay" })">Chậu cây</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="@Url.Action("Index", "Cart")">Giỏ hàng</a></li>
+                                        <li><a href="@Url.Action("Checkout", "Order")">Thanh toán</a></li>
+                                        <li>
+                                            <a href="@Url.Action("Index", "Blog")">Blog</a>
+                                            <ul class="dropdown">
+                                                <li><a href="@Url.Action("Index", "Blog")">Blog</a></li>
+                                                <li><a href="@Url.Action("Details", "Blog")">Blog Details</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                @* <li>
+                                    <a href="@Url.Action("Index", "Portfolio")">Portfolio</a>
+                                </li> *@
+                                <li>
+                                    <a href="@Url.Action("Portfolio", "Home")">Portfolio</a>
+                                </li>
+
+                                <li>
+                                    <a href="@Url.Action("Contact", "Home")">Liên hệ</a>
+                                </li>
+                            </ul>
+
+                            <!-- Search Icon -->
+                            <div id="searchIcon">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </div>
+
+                        </div>
+                        <!-- Navbar End -->
+                    </div>
+                </nav>
+
+                <!-- Search Form -->
+                <div class="search-form">
+                    <form action="#" method="get">
+                        <input type="search" name="search" id="search"
+                               placeholder="Nhập từ khóa &amp; nhấn enter..." />
+                        <button type="submit" class="d-none"></button>
+                    </form>
+                    <!-- Close Icon -->
+                    <div class="closeIcon">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ##### Header Area End ##### -->

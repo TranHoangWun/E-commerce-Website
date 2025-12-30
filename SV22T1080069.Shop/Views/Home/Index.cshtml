@@ -1,8 +1,567 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+@model IEnumerable<Product>
+@* 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+</div> *@
+<!-- ##### Hero Area Start ##### -->
+<section class="hero-area">
+    <div class="hero-post-slides owl-carousel">
+        <!-- Single Hero Post -->
+        <div class="single-hero-post bg-overlay">
+            <!-- Post Image -->
+            <div class="slide-img bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/1b.jpg")')"></div>
+            <div class="container h-100">
+                <div class="row h-100 align-items-center">
+                    <div class="col-12">
+                        <!-- Post Content -->
+                        <div class="hero-slides-content text-center">
+                            <h2>Trì nhật giang sơn lệ,</h2>
+                            <h2>Xuân phong hoa thảo hương</h2>
+                            <p>
+                                Chúng tôi mong muốn lan tỏa được tình yêu cây xanh ngày một nhiều hơn đến với mọi
+                                người. Thông qua việc không ngừng nỗ lực cung cấp các loại cây xanh chất lượng với
+                                nhiều chủng loại đẹp và đa dạng, phù hợp với các nhu cầu của khách hàng.
+                            </p>
+                            <div class="welcome-btn-group">
+                                <a href="@Url.Action("Index", "Shop")" class="btn alazea-btn mr-30">MUA NGAY</a>
+                                <!-- <a href="#" class="">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Single Hero Post -->
+        <div class="single-hero-post bg-overlay">
+            <!-- Post Image -->
+            <div class="slide-img bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/2b.png")')"></div>
+            <div class="container h-100">
+                <div class="row h-100 align-items-center">
+                    <div class="col-12">
+                        <!-- Post Content -->
+                        <div class="hero-slides-content text-center">
+                            <h2>Trì nhật giang sơn lệ,</h2>
+                            <h2>Xuân phong hoa thảo hương</h2>
+                            <p>
+                                Chúng tôi mong muốn lan tỏa được tình yêu cây xanh ngày một nhiều hơn đến với mọi
+                                người. Thông qua việc không ngừng nỗ lực cung cấp các loại cây xanh chất lượng với
+                                nhiều chủng loại đẹp và đa dạng, phù hợp với các nhu cầu của khách hàng.
+                            </p>
+                            <div class="welcome-btn-group">
+                                <a href="@Url.Action("Index", "Shop")" class="btn alazea-btn mr-30">MUA NGAY</a>
+                                <!-- <a href="#" class="">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Single Hero Post -->
+        <div class="single-hero-post bg-overlay">
+            <!-- Post Image -->
+            <div class="slide-img bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/3b.jpg")')"></div>
+            <div class="container h-100">
+                <div class="row h-100 align-items-center">
+                    <div class="col-12">
+                        <!-- Post Content -->
+                        <div class="hero-slides-content text-center">
+                            <h2>Trì nhật giang sơn lệ,</h2>
+                            <h2>Xuân phong hoa thảo hương</h2>
+                            <p>
+                                Chúng tôi mong muốn lan tỏa được tình yêu cây xanh ngày một nhiều hơn đến với mọi
+                                người. Thông qua việc không ngừng nỗ lực cung cấp các loại cây xanh chất lượng với
+                                nhiều chủng loại đẹp và đa dạng, phù hợp với các nhu cầu của khách hàng.
+                            </p>
+                            <div class="welcome-btn-group">
+                                <a href="@Url.Action("Index", "Shop")" class="btn alazea-btn mr-30">MUA NGAY</a>
+                                <!-- <a href="#" class="">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ##### Hero Area End ##### -->
+<!-- ##### Service Area Start ##### -->
+<section class="our-services-area bg-gray section-padding-100-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Section Heading -->
+                <div class="section-heading text-center">
+                    <h2>Sản phẩm của chúng tôi</h2>
+                    <p>
+                        Chúng tôi cung cấp những sản phẩm chất lượng cao, đa dạng và phù hợp với nhu cầu của khách
+                        hàng.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-between">
+            <div class="col-12 col-lg-5">
+                <div class="alazea-service-area mb-100">
+                    <!-- Single Service Area -->
+                    <div class="single-service-area d-flex align-items-center wow fadeInUp" data-wow-delay="100ms">
+                        <!-- Icon -->
+                        <div class="service-icon mr-30">
+                            <img src="~/assets/img/core-img/s1.png" alt="">
+                        </div>
+                        <!-- Content -->
+                        <div class="service-content">
+                            <h5>Cây xương rồng, cây mọng nước</h5>
+                            <p>
+                                In Aenean purus, pretium sito amet sapien denim moste consectet sedoni urna placerat
+                                sodales.service its.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Single Service Area -->
+                    <div class="single-service-area d-flex align-items-center wow fadeInUp" data-wow-delay="300ms">
+                        <!-- Icon -->
+                        <div class="service-icon mr-30">
+                            <img src="~/assets/img/core-img/s2.png" alt="">
+                        </div>
+                        <!-- Content -->
+                        <div class="service-content">
+                            <h5>Cây nội thất</h5>
+                            <p>
+                                In Aenean purus, pretium sito amet sapien denim moste consectet sedoni urna placerat
+                                sodales.service its.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Single Service Area -->
+                    <div class="single-service-area d-flex align-items-center wow fadeInUp" data-wow-delay="500ms">
+                        <!-- Icon -->
+                        <div class="service-icon mr-30">
+                            <img src="~/assets/img/core-img/s3.png" alt="">
+                        </div>
+                        <!-- Content -->
+                        <div class="service-content">
+                            <h5>Terrarium &amp; Phụ kiện</h5>
+                            <p>
+                                In Aenean purus, pretium sito amet sapien denim moste consectet sedoni urna placerat
+                                sodales.service its.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="alazea-video-area bg-overlay mb-100">
+                    <img src="~/assets/img/bg-img/23.jpg" alt="">
+                    <a href="http://www.youtube.com/watch?v=7HKoqNJtMTQ" class="video-icon">
+                        <i class="fa fa-play" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ##### Service Area End ##### -->
+<!-- ##### About Area Start ##### -->
+<section class="about-us-area section-padding-100-0">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-12 col-lg-5">
+                <!-- Section Heading -->
+                <div class="section-heading">
+                    <h2>VỀ CHÚNG TÔI</h2>
+                    <p>Không gian xanh, chạm vào cá tính của bạn.</p>
+                </div>
+                <p>
+                    HoaMuaHa là nơi chúng tôi mong muốn mang thiên nhiên đến gần hơn với từng góc nhà, góc làm việc,
+                    giúp bạn thư giãn, tái tạo năng lượng và thể hiện tình yêu cây cối theo cách riêng của mình.
+                </p>
+
+                <!-- Progress Bar Content Area -->
+                <div class="alazea-progress-bar mb-50">
+                    <!-- Single Progress Bar -->
+                    <div class="single_progress_bar">
+                        <p>Cây để bàn & nội thất</p>
+                        <div id="bar1" class="barfiller">
+                            <div class="tipWrap">
+                                <span class="tip"></span>
+                            </div>
+                            <span class="fill" data-percentage="90"></span>
+                        </div>
+                    </div>
+
+                    <div class="single_progress_bar">
+                        <p>Xương rồng & cây mọng nước</p>
+                        <div id="bar2" class="barfiller">
+                            <div class="tipWrap">
+                                <span class="tip"></span>
+                            </div>
+                            <span class="fill" data-percentage="85"></span>
+                        </div>
+                    </div>
+
+                    <div class="single_progress_bar">
+                        <p>Terrarium & tiểu cảnh</p>
+                        <div id="bar3" class="barfiller">
+                            <div class="tipWrap">
+                                <span class="tip"></span>
+                            </div>
+                            <span class="fill" data-percentage="80"></span>
+                        </div>
+                    </div>
+
+                    <div class="single_progress_bar">
+                        <p>Tư vấn trang trí không gian xanh</p>
+                        <div id="bar4" class="barfiller">
+                            <div class="tipWrap">
+                                <span class="tip"></span>
+                            </div>
+                            <span class="fill" data-percentage="75"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="alazea-benefits-area">
+                    <div class="row">
+                        <!-- Single Benefits Area -->
+                        <div class="col-12 col-sm-6">
+                            <div class="single-benefits-area">
+                                <img src="~/assets/img/core-img/b1.png" alt="">
+                                <h5>Sản phẩm tuyển chọn</h5>
+                                <p>
+                                    Mỗi chậu cây đều được chọn lọc kỹ, khỏe mạnh, dáng đẹp, phù hợp khí hậu và điều
+                                    kiện sống tại Việt Nam.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <div class="single-benefits-area">
+                                <img src="~/assets/img/core-img/b2.png" alt="">
+                                <h5>Đồng hành tận tâm</h5>
+                                <p>
+                                    Chúng tôi hướng dẫn chăm sóc chi tiết, hỗ trợ giải đáp thắc mắc để cây luôn tươi
+                                    tốt bên bạn.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <div class="single-benefits-area">
+                                <img src="~/assets/img/core-img/b3.png" alt="">
+                                <h5>Không gian xanh sáng tạo</h5>
+                                <p>
+                                    Terrarium, combo cây để bàn và giải pháp trang trí giúp bạn biến mọi góc nhỏ
+                                    thành một khu vườn mini.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <div class="single-benefits-area">
+                                <img src="~/assets/img/core-img/b4.png" alt="">
+                                <h5>Gần gũi môi trường</h5>
+                                <p>
+                                    Khuyến khích lối sống xanh, sử dụng vật liệu thân thiện và các loại cây giúp
+                                    thanh lọc không khí, giảm căng thẳng.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="border-line"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ##### About Area End ##### -->
+<!-- ##### Portfolio Area Start ##### -->
+<section class="alazea-portfolio-area section-padding-100-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Section Heading -->
+                <div class="section-heading text-center">
+                    <h2>OUR PORTFOLIO</h2>
+                    <p>Chúng tôi có những sản phẩm phù hợp cho không gian của bạn</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="alazea-portfolio-filter">
+                    <div class="portfolio-filter">
+                        <button class="btn active" data-filter="*">Tất cả</button>
+                        <button class="btn" data-filter=".design">Trang trí quán</button>
+                        <button class="btn" data-filter=".garden">Vườn của bạn</button>
+                        <button class="btn" data-filter=".home-design">Trong nhà</button>
+                        <button class="btn" data-filter=".office-design">Terrarium</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row alazea-portfolio">
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item design home-design wow fadeInUp"
+                 data-wow-delay="100ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/16.jpg")')"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/16.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 1">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item garden wow fadeInUp" data-wow-delay="200ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/17.jpg")')"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/17.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 2">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item garden design wow fadeInUp"
+                 data-wow-delay="300ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/18.jpg")')"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/18.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 3">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item garden office-design wow fadeInUp"
+                 data-wow-delay="400ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/19.jpg")')"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/19.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 4">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item design office-design wow fadeInUp"
+                 data-wow-delay="100ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/20.jpg")')"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/20.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 5">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item garden wow fadeInUp" data-wow-delay="200ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/21.jpg")')"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/21.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 6">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Single Portfolio Area -->
+            <div class="col-12 col-lg-6 single_portfolio_item home-design wow fadeInUp" data-wow-delay="300ms">
+                <!-- Portfolio Thumbnail -->
+                <div class="portfolio-thumbnail bg-img" style="background-image: url('@Url.Content("~/assets/img/bg-img/22.jpg")')"></div>
+                <!-- Portfolio Hover Text -->
+                <div class="portfolio-hover-overlay">
+                    <a href="~/assets/img/bg-img/22.jpg"
+                       class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 7">
+                        <div class="port-hover-text">
+                            <h3>Minimal Flower Store</h3>
+                            <h5>Office Plants</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- ##### Portfolio Area End ##### -->
+<!-- ##### Testimonial Area Start ##### -->
+<!-- ##### Testimonial Area End ##### -->
+<!-- ##### Product Area Start ##### -->
+<section class="new-arrivals-products-area bg-gray section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Section Heading -->
+                <div class="section-heading text-center">
+                    <h2>NEW ARRIVALS</h2>
+                    <p>We have the latest products, it must be exciting for you</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    var imgUrl = string.IsNullOrEmpty(item.Photo)
+                    ? ApplicationContext.ProductImagePath + "nophoto.png"
+                    : ApplicationContext.ProductImagePath + item.Photo;
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="single-product-area mb-50 wow fadeInUp" data-wow-delay="200ms">
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })">
+                                    @* <img src="~/images/products/@item.Photo" alt="@item.ProductName" /> *@
+                                    <img src="@imgUrl" alt="@item.ProductName" />
+                                </a>
+                                <div class="product-meta d-flex">
+                                    <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a>
+                                    <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })"
+                                       class="add-to-cart-btn">Thêm vào giỏ</a>
+                                </div>
+                            </div>
+                            <!-- Product Info -->
+                            <div class="product-info mt-15 text-center">
+                                <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })">
+                                    <p>@item.ProductName</p>
+                                </a>
+                                <h6>@item.Price.ToString("N0") VNĐ</h6>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center">
+                    <p>Hiện chưa có sản phẩm nào.</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ##### Product Area End ##### -->
+<!-- ##### Blog Area Start ##### -->
+<!-- ##### Blog Area End ##### -->
+<!-- ##### Subscribe Area Start ##### -->
+<!-- ##### Subscribe Area End ##### -->
+<!-- ##### Contact Area Start ##### -->
+<section class="contact-area section-padding-100-0">
+    <div class="container">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-12 col-lg-5">
+                <!-- Section Heading -->
+                <div class="section-heading">
+                    <h2>GET IN TOUCH</h2>
+                    <p>Send us a message, we will call back later</p>
+                </div>
+                <!-- Contact Form Area -->
+                <div class="contact-form-area mb-100">
+                    <form action="#" method="post">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="contact-name"
+                                           placeholder="Your Name">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" id="contact-email"
+                                           placeholder="Your Email">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="contact-subject"
+                                           placeholder="Subject">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <textarea class="form-control" name="message" id="message" cols="30" rows="10"
+                                              placeholder="Message"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn alazea-btn mt-15">Send Message</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <!-- Google Maps -->
+                <div class="map-area mb-100">
+                    <iframe src="https://www.google.com/maps?q=Đại+Học+Khoa+Học+Huế&output=embed" loading="lazy">
+                    </iframe>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ##### Contact Area End ##### -->

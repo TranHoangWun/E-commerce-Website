@@ -71,7 +71,7 @@ namespace SV22T1080069.DataLayers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Customer> GetAsync(int id)
+        public async Task<Customer?> GetAsync(int id)
         {
             using var connection = await OpenConnectionAsync();
             var sql = "SELECT * FROM Customers WHERE CustomerID = @id";

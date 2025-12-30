@@ -49,7 +49,7 @@ namespace SV22T1080069.DataLayers
                 return await connection.ExecuteScalarAsync<int>(sql: sql, param: parameters, commandType: CommandType.Text);
             }
         }
-        public async Task<DomainModels.Shipper> GetAsync(int shipperID)
+        public async Task<DomainModels.Shipper?> GetAsync(int shipperID)
         {
             using (var connection = await OpenConnectionAsync())
             {
