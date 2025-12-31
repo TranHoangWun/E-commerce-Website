@@ -71,7 +71,7 @@ namespace SV22T1080069.Shop.Controllers
              maxPrice: condition.MaxPrice,
              sortBy: condition.SortBy   // CHỈ THÊM DÒNG NÀY
             );
-            var rowCount = await ProductDataService.ProductDB.CountAsync(
+            var rowCount = await ProductDataService.ProductDB.CountForShopAsync(
                 searchValue: condition.SearchValue,
                 categoryID: condition.CategoryID,
                 supplierID: condition.SupplierID,
@@ -113,7 +113,7 @@ namespace SV22T1080069.Shop.Controllers
                 condition.MinPrice, condition.MaxPrice, condition.SortBy
             );
 
-            var rowCount = await ProductDataService.ProductDB.CountAsync(
+            var rowCount = await ProductDataService.ProductDB.CountForShopAsync(
                 condition.SearchValue, condition.CategoryID, condition.SupplierID,
                 condition.MinPrice, condition.MaxPrice
             );

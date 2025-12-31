@@ -477,8 +477,9 @@
                                 </a>
                                 <div class="product-meta d-flex">
                                     <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a>
-                                    <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })"
-                                       class="add-to-cart-btn">Thêm vào giỏ</a>
+                                    <a href="javascript:void(0)" class="add-to-cart-btn" data-id="@item.ProductID">
+                                        Thêm vào giỏ
+                                    </a>
                                 </div>
                             </div>
                             <!-- Product Info -->

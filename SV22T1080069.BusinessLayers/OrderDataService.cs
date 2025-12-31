@@ -1,6 +1,7 @@
-﻿using SV22T1080069.DataLayers.SQLServer;
-using SV22T1080069.BusinessLayers;
+﻿using SV22T1080069.BusinessLayers;
 using SV22T1080069.DataLayers;
+using SV22T1080069.DataLayers.SQLServer;
+using SV22T1080069.DomainModels;
 
 namespace SV22T1080069.BusinessLayers
 {
@@ -22,6 +23,11 @@ namespace SV22T1080069.BusinessLayers
         /// 
         /// </summary>
         public static OrderDAL OrderDB => orderDB;
+        public static async Task<int> CreateOrderFromCartAsync(Order order, IList<CartItemDb> cartItems)
+        {
+            return await orderDB.CreateFromCartAsync(order, cartItems);
+        }
+
     }
     public class ShipperDataService
     {
@@ -38,4 +44,5 @@ namespace SV22T1080069.BusinessLayers
         /// </summary>
         public static ShipperDAL ShipperDB => shipperDB;
     }
+
 }

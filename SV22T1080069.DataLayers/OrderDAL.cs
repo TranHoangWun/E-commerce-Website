@@ -389,5 +389,65 @@ namespace SV22T1080069.DataLayers.SQLServer
                 param: parameters,
                 commandType: System.Data.CommandType.Text)) > 0;
         }
+        /// <summary>
+        /// Tạo đơn hàng mới từ giỏ hàng (transaction)
+        /// </summary>
+        public async Task<int> CreateFromCartAsync(Order order, IList<CartItemDb> cartItems)
+        {
+            using var connection = await OpenConnectionAsync();
+            using var tran = connection.BeginTransaction();
+
+            try
+            {
+                // 1. Insert Orders (lưu cả thông tin khách tại thời điểm đặt)
+                var sqlOrder = @"
+                insert into Orders
+                    (CustomerID, OrderTime,
+                     DeliveryProvince, DeliveryAddress,
+                     EmployeeID, Status)
+                values
+                    (@CustomerID, getdate(),
+                     @DeliveryProvince, @DeliveryAddress,
+                     @EmployeeID, @Status);
+                select cast(@@identity as int);";
+
+                var orderId = await connection.ExecuteScalarAsync<int>(
+                    sql: sqlOrder,
+                    param: order,
+                    transaction: tran,
+                    commandType: System.Data.CommandType.Text);
+
+                // 2. Insert OrderDetails từ cart
+                var sqlDetail = @"
+            insert into OrderDetails(OrderID, ProductID, Quantity, SalePrice)
+            values(@OrderID, @ProductID, @Quantity, @SalePrice);";
+
+                foreach (var item in cartItems)
+                {
+                    var detailParams = new
+                    {
+                        OrderID = orderId,
+                        ProductID = item.ProductID,
+                        Quantity = item.Quantity,
+                        SalePrice = item.UnitPrice
+                    };
+
+                    await connection.ExecuteAsync(
+                        sql: sqlDetail,
+                        param: detailParams,
+                        transaction: tran,
+                        commandType: System.Data.CommandType.Text);
+                }
+
+                tran.Commit();
+                return orderId;
+            }
+            catch
+            {
+                tran.Rollback();
+                throw;
+            }
+        }
+
     }
 }

@@ -119,20 +119,30 @@
                             <form class="cart clearfix d-flex align-items-center" method="post">
                                 <div class="quantity">
                                     <span class="qty-minus"
-                                          onclick="var e=document.getElementById('qty');var q=e.value; if(!isNaN(q)&&q>1)e.value--; return false;">
+                                          onclick="var e=document.getElementById('detail-qty');var q=e.value; if(!isNaN(q)&&q>1)e.value--; return false;">
                                         <i class="fa fa-minus" aria-hidden="true"></i>
                                     </span>
-                                    <input type="number" class="qty-text" id="qty"
+
+                                    <input type="number" class="qty-text" id="detail-qty"
                                            step="1" min="1" max="99"
                                            name="quantity" value="1" />
+
                                     <span class="qty-plus"
-                                          onclick="var e=document.getElementById('qty');var q=e.value; if(!isNaN(q))e.value++; return false;">
+                                          onclick="var e=document.getElementById('detail-qty');var q=e.value; if(!isNaN(q))e.value++; return false;">
                                         <i class="fa fa-plus" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                                <button type="submit" name="addtocart" class="btn alazea-btn ml-15">
+                                    @* <span class="qty-plus"
+                                          onclick="var e=document.getElementById('qty');var q=e.value; if(!isNaN(q))e.value++; return false;">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </span> *@
+                                
+                                @* <button type="submit" name="addtocart" class="btn alazea-btn ml-15">
                                     Thêm vào giỏ
-                                </button>
+                                </button> *@
+                                <a href="javascript:void(0)" class="btn alazea-btn ml-15" data-id="@Model.Product.ProductID">
+                                    Thêm vào giỏ
+                                </a>
                             </form>
 
                             <div class="wishlist-compare d-flex flex-wrap align-items-center">
@@ -267,8 +277,11 @@
                                                 <div class="product-meta d-flex">
                                                     <a href="@Url.Action("Wishlist", "Account", new { id = item.ProductID })"
                                                        class="wishlist-btn"><i class="icon_heart_alt"></i></a>
-                                                    <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })"
-                                                       class="add-to-cart-btn">Thêm vào giỏ</a>
+                                                    @* <a href="@Url.Action("Details", "Shop", new { id = item.ProductID })"
+                                                       class="add-to-cart-btn">Thêm vào giỏ</a> *@
+                                                    <a href="javascript:void(0)" class="add-to-cart-btn" data-id="@item.ProductID">
+                                                        Thêm vào giỏ
+                                                    </a>
                                                 </div>
                                             </div>
                                             <div class="product-info mt-15 text-center">

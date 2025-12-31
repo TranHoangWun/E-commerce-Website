@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Identity.Client;
 using SV22T1080069.Admin.Models;
 using SV22T1080069.BusinessLayers;
@@ -18,6 +19,15 @@ namespace SV22T1080069.Admin.Controllers
         //}
         private const int PAGESIZE_ORDER = 20;
         private const string ORDER_SEARCH_CONDITION = "OrderSearchCodition";
+        private int? GetCurrentEmployeeId()
+        {
+            var userData = User.GetUserData();
+            if (userData == null || string.IsNullOrEmpty(userData.UserId))
+                return null;
+
+            return Convert.ToInt32(userData.UserId);
+        }
+
         public IActionResult Index()
         {
             var condition = ApplicationContext.GetSessionData<OrderSearchCondition>(ORDER_SEARCH_CONDITION);
@@ -462,6 +472,14 @@ namespace SV22T1080069.Admin.Controllers
         {
             if (id <= 0)
                 return RedirectToAction("Index");
+            // Cập nhật nhân viên phụ trách đơn
+            var order = await OrderDataService.OrderDB.GetAsync(id);
+            if (order != null && !order.EmployeeID.HasValue)
+            {
+                var employeeId = GetCurrentEmployeeId();
+                if (employeeId.HasValue)
+                    await OrderDataService.OrderDB.UpdateEmployeeAsync(id, employeeId.Value);
+            }
 
             bool result = await OrderDataService.OrderDB.AcceptAsync(id);
             TempData[result ? "Message" : "Error"] =
@@ -523,13 +541,22 @@ namespace SV22T1080069.Admin.Controllers
         //{
         //    return View();
         //}
-        public IActionResult Shipping(int id = 0)
+        public async Task<IActionResult> ShippingAsync(int id = 0)
         {
             if (id <= 0)
                 return Content("Yêu cầu không hợp lệ");
 
             ViewBag.OrderID = id;
-            //ViewBag.Shippers = ShipperDataService.ShipperDB.ListAsync();
+            // Lấy danh sách shipper từ DB
+            var shippers = await ShipperDataService.ShipperDB.ListAsync();
+
+            ViewBag.Shippers = shippers
+                .Select(s => new SelectListItem
+                {
+                    Value = s.ShipperID.ToString(),
+                    Text = s.ShipperName
+                })
+                .ToList();
             return View();
         }
         //[HttpPost]
@@ -548,7 +575,13 @@ namespace SV22T1080069.Admin.Controllers
         {
             if (orderID <= 0 || shipperID <= 0)
                 return RedirectToAction("Details", new { id = orderID });
-
+            var order = await OrderDataService.OrderDB.GetAsync(orderID);
+            if (order != null && !order.EmployeeID.HasValue)
+            {
+                var employeeId = GetCurrentEmployeeId();
+                if (employeeId.HasValue)
+                    await OrderDataService.OrderDB.UpdateEmployeeAsync(orderID, employeeId.Value);
+            }
             bool result = await OrderDataService.OrderDB.ShipAsync(orderID, shipperID);
 
             TempData[result ? "Message" : "Error"] =
@@ -557,13 +590,17 @@ namespace SV22T1080069.Admin.Controllers
 
             return RedirectToAction("Details", new { id = orderID });
         }
-
-
-
         public async Task<IActionResult> Finish(int id = 0)
         {
             if (id <= 0)
                 return RedirectToAction("Index");
+            var order = await OrderDataService.OrderDB.GetAsync(id);
+            if (order != null && !order.EmployeeID.HasValue)
+            {
+                var employeeId = GetCurrentEmployeeId();
+                if (employeeId.HasValue)
+                    await OrderDataService.OrderDB.UpdateEmployeeAsync(id, employeeId.Value);
+            }
 
             bool result = await OrderDataService.OrderDB.FinishAsync(id);
             TempData[result ? "Message" : "Error"] =
@@ -576,6 +613,13 @@ namespace SV22T1080069.Admin.Controllers
         {
             if (id <= 0)
                 return RedirectToAction("Index");
+            var order = await OrderDataService.OrderDB.GetAsync(id);
+            if (order != null && !order.EmployeeID.HasValue)
+            {
+                var employeeId = GetCurrentEmployeeId();
+                if (employeeId.HasValue)
+                    await OrderDataService.OrderDB.UpdateEmployeeAsync(id, employeeId.Value);
+            }
 
             bool result = await OrderDataService.OrderDB.CancelAsync(id);
             TempData[result ? "Message" : "Error"] =
@@ -588,6 +632,13 @@ namespace SV22T1080069.Admin.Controllers
         {
             if (id <= 0)
                 return RedirectToAction("Index");
+            var order = await OrderDataService.OrderDB.GetAsync(id);
+            if (order != null && !order.EmployeeID.HasValue)
+            {
+                var employeeId = GetCurrentEmployeeId();
+                if (employeeId.HasValue)
+                    await OrderDataService.OrderDB.UpdateEmployeeAsync(id, employeeId.Value);
+            }
 
             bool result = await OrderDataService.OrderDB.RejectAsync(id);
             TempData[result ? "Message" : "Error"] =

@@ -13,9 +13,9 @@ namespace SV22T1080069.Shop
         public static async Task<IEnumerable<SelectListItem>> Provinces(string? selected = null)
         {
             var list = new List<SelectListItem>
-    {
-        new SelectListItem { Value = "", Text = "-- Chọn Tỉnh/Thành --" }
-    };
+            {
+             new SelectListItem { Value = "", Text = "-- Chọn Tỉnh/Thành --" }
+            };
 
             foreach (var item in await CommonDataService.ProvinceDB.ListAsync())
             {

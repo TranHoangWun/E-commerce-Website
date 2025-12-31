@@ -90,25 +90,24 @@ namespace SV22T1080069.DataLayers
                 "price_desc" => "Price DESC",
                 _ => "ProductName ASC"
             };
-
             using var connection = await OpenConnectionAsync();
-
+            // 1. ListSortedAsync: dùng cho Shop
             var sql = $@"
-    WITH cte AS (
-        SELECT *,
-               ROW_NUMBER() OVER(ORDER BY {orderClause}) AS RowNumber
-        FROM Products
-        WHERE (ProductName LIKE @SearchValue)
-          AND (@CategoryID = 0 OR CategoryID = @CategoryID)
-          AND (@SupplierID = 0 OR SupplierId = @SupplierID)
-          AND (Price >= @MinPrice)
-          AND (@MaxPrice <= 0 OR Price <= @MaxPrice)
-    )
-    SELECT *
-    FROM cte
-    WHERE (@PageSize = 0)
-       OR (RowNumber BETWEEN (@Page - 1)*@PageSize + 1 AND @Page * @PageSize);";
-
+            WITH cte AS (
+                SELECT *,
+                       ROW_NUMBER() OVER(ORDER BY {orderClause}) AS RowNumber
+                FROM Products
+                WHERE IsSelling = 1                            -- chỉ lấy hàng đang bán
+                  AND (ProductName LIKE @SearchValue)
+                  AND (@CategoryID = 0 OR CategoryID = @CategoryID)
+                  AND (@SupplierID = 0 OR SupplierId = @SupplierID)
+                  AND (Price >= @MinPrice)
+                  AND (@MaxPrice <= 0 OR Price <= @MaxPrice)
+            )
+            SELECT *
+            FROM cte
+            WHERE (@PageSize = 0)
+               OR (RowNumber BETWEEN (@Page - 1)*@PageSize + 1 AND @Page * @PageSize);";
             var parameters = new
             {
                 Page = page,
@@ -139,6 +138,35 @@ namespace SV22T1080069.DataLayers
         SELECT COUNT(*)
         FROM Products
         WHERE (ProductName LIKE @SearchValue)
+          AND (@CategoryID = 0 OR CategoryID = @CategoryID)
+          AND (@SupplierID = 0 OR SupplierId = @SupplierID)
+          AND (Price >= @MinPrice)
+          AND (@MaxPrice <= 0 OR Price <= @MaxPrice)
+    ";
+
+            var parameters = new
+            {
+                SearchValue = searchValue ?? "",
+                CategoryID = categoryID,
+                SupplierID = supplierID,
+                MinPrice = minPrice,
+                MaxPrice = maxPrice
+            };
+
+            return await connection.ExecuteScalarAsync<int>(sql, parameters);
+        }
+        public async Task<int> CountForShopAsync(string searchValue = "", int categoryID = 0, int supplierID = 0,
+                                         decimal minPrice = 0, decimal maxPrice = 0)
+        {
+            using var connection = await OpenConnectionAsync();
+
+            searchValue = $"%{searchValue}%";
+
+            var sql = @"
+        SELECT COUNT(*)
+        FROM Products
+        WHERE IsSelling = 1
+          AND (ProductName LIKE @SearchValue)
           AND (@CategoryID = 0 OR CategoryID = @CategoryID)
           AND (@SupplierID = 0 OR SupplierId = @SupplierID)
           AND (Price >= @MinPrice)
@@ -477,7 +505,7 @@ namespace SV22T1080069.DataLayers
         public async Task<decimal> GetMinPriceAsync()
         {
             using var connection = await OpenConnectionAsync();
-            var sql = @"SELECT ISNULL(MIN(Price), 0) FROM Products;";
+            var sql = @"SELECT ISNULL(MIN(Price), 0) FROM Products WHERE IsSelling = 1;";
             return await connection.ExecuteScalarAsync<decimal>(sql, commandType: System.Data.CommandType.Text);
         }
         /// <summary>
@@ -487,16 +515,17 @@ namespace SV22T1080069.DataLayers
         public async Task<decimal> GetMaxPriceAsync()
         {
             using var connection = await OpenConnectionAsync();
-            var sql = @"SELECT ISNULL(MAX(Price), 0) FROM Products;";
+            var sql = @"SELECT ISNULL(MAX(Price), 0) FROM Products WHERE IsSelling = 1;";
             return await connection.ExecuteScalarAsync<decimal>(sql, commandType: System.Data.CommandType.Text);
         }
         public async Task<IEnumerable<Product>> TopProductsByPriceAsync(int top = 4)
         {
             using var connection = await OpenConnectionAsync();
             var sql = @"
-        SELECT TOP (@Top) *
-        FROM Products
-        ORDER BY Price DESC;";          // TOP N + ORDER BY [web:49]
+            SELECT TOP (@Top) *
+            FROM Products
+            WHERE IsSelling = 1
+            ORDER BY Price DESC;";        // TOP N + ORDER BY [web:49]
 
             return await connection.QueryAsync<Product>(sql, new { Top = top });
         }

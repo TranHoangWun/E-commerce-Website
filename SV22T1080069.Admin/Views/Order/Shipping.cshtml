@@ -1,7 +1,41 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@{
     Layout = null;
 }
 
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form action="~/Order/Shipping" method="post">
+            <input type="hidden" name="orderID" value="@ViewBag.OrderID" />
+
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Chuyển giao hàng cho đơn hàng</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Người giao hàng:</label>
+                    @Html.DropDownList(
+                    "shipperID",
+                                        (IEnumerable<SelectListItem>)ViewBag.Shippers,
+                                        "-- Chọn người giao hàng ---",
+                                        new { @class = "form-control", required = "required" })
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-floppy-o"></i> Cập nhật
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Bỏ qua
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@*
 <div class="modal-dialog">
     <div class="modal-content">
         <form action="~/Order/Shipping" method="post">
@@ -34,9 +68,10 @@
             </div>
         </form>
     </div>
-</div>
+</div>*@
 
-@* <div class="modal-dialog">
+@*// cũ trước trên  
+    <div class="modal-dialog">
     <div class="modal-content">
         <form action="~/Order/Shipping/111" method="post">
             <div class="modal-header bg-primary">

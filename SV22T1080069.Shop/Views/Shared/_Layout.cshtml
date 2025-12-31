@@ -42,38 +42,74 @@
         <script src="~/assets/js/active.js"></script>
         @RenderSection("Scripts", required: false)
     <script>
-                document.addEventListener('click', function (e) {
-            const btn = e.target.closest('.add-to-cart-btn');
+        // true nếu đã đăng nhập, false nếu chưa (BOOLEAN)
+        window.isAuthenticated = @(User.Identity?.IsAuthenticated == true ? "true" : "false");
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.className = 'cart-toast ' +
+                              (type === 'success' ? 'cart-toast--success' : 'cart-toast--error');
+            document.body.appendChild(toast);
+
+            void toast.offsetWidth;
+            toast.classList.add('cart-toast--visible');
+
+            setTimeout(() => {
+                toast.classList.remove('cart-toast--visible');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.add-to-cart-btn, .btn.alazea-btn.ml-15');
             if (!btn) return;
 
             e.preventDefault();
 
+            console.log('isAuthenticated =', window.isAuthenticated, typeof window.isAuthenticated);
+
+            // Chưa đăng nhập: thông báo đỏ
+            if (!window.isAuthenticated) {
+                showToast('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng', 'error');
+                return;
+            }
+
             const id = btn.dataset.id;
-            console.log('Add to cart clicked, id =', id);
+
+            // lấy số lượng: ưu tiên ô trên trang chi tiết, nếu không có thì mặc định 1
+            let qtyInput = document.getElementById('detail-qty');
+            let quantity = 1;
+            if (qtyInput) {
+                quantity = parseInt(qtyInput.value, 10) || 1;
+            }
 
             fetch('/Cart/AddAjax', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
                 },
-                body: 'id=' + encodeURIComponent(id) + '&quantity=1'
+                body: 'id=' + encodeURIComponent(id) +
+                      '&quantity=' + encodeURIComponent(quantity)
             })
-            .then(r => {
-                console.log('Response status', r.status);
-                if (!r.ok) throw new Error('Error ' + r.status);
-                return r.json();
-            })
+            .then(r => r.json())
             .then(data => {
-                console.log('AddAjax result', data);
                 if (data.success) {
                     const span = document.getElementById('cart-quantity');
                     if (span) span.textContent = '(' + data.totalQuantity + ')';
-                     alert('Đã thêm sản phẩm vào giỏ hàng');
+                    showToast('Đã thêm sản phẩm vào giỏ hàng', 'success');
+                } else {
+                    showToast('Không thể thêm sản phẩm vào giỏ hàng', 'error');
                 }
             })
-            .catch(err => console.error('AddAjax error', err));
+            .catch(err => {
+                console.error('AddAjax error', err);
+                showToast('Có lỗi xảy ra, vui lòng thử lại', 'error');
+            });
         });
     </script>
+
     </body>
     </html>
 
+            @* window.isAuthenticated = @(User.Identity != null && User.Identity.IsAuthenticated ? "true" : "false"); *@
