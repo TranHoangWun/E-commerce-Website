@@ -23,6 +23,5 @@ namespace SV22T1080069.DomainModels
         public string ProductName { get; set; } = "";
         public string Photo { get; set; } = "";
 
-
     }
 }

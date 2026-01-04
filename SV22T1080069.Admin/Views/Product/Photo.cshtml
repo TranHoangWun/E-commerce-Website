@@ -25,7 +25,8 @@
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
                     <input type="hidden" value="photo.png" />
-                    <img id="Photo" src="~/images/products/@(Model.Photo ?? "nophoto.png")" class="img img-bordered" style="width:200px" />
+                    @* <img id="Photo" src="~/images/products/@(Model.Photo ?? "nophoto.png")" class="img img-bordered" style="width:200px" /> *@
+                    <img id="Photo" src="~/images/shopproducts/@(Model.Photo ?? "nophoto.png")" class="img img-bordered" style="width:200px" />
 
                 </div>
             </div>

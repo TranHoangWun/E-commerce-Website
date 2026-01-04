@@ -349,7 +349,8 @@ namespace SV22T1080069.Admin.Controllers
                 if (model.UploadPhoto != null)
                 {
                     string fileName = $"{DateTime.Now.Ticks}_{model.UploadPhoto.FileName}";
-                    string filePath = Path.Combine(ApplicationContext.WWWRootPath, "images", "products", fileName);
+                    //string filePath = Path.Combine(ApplicationContext.WWWRootPath, "images", "products", fileName);
+                    string filePath = Path.Combine(ApplicationContext.WWWRootPath, "images", "shopproducts", fileName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {

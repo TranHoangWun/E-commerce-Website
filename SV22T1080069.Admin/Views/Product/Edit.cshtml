@@ -95,9 +95,9 @@
 
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
-                    <img id="imgPhoto" src="~/images/products/@Model.Photo" class="img img-bordered" style="width:200px" />
-                    @* <img id="Photo" src="~/images/products/@Model.Photo" class="img img-bordered" style="width:200px" /> *@
-
+                    @* <img id="imgPhoto" src="~/images/products/@Model.Photo" class="img img-bordered" style="width:200px" /> *@
+                    <img id="imgPhoto" src="~/images/shopproducts/@Model.Photo" class="img img-bordered" style="width:200px" />
+                    
                 </div>
             </div>
 
@@ -149,8 +149,9 @@
                     <tr>
                         <td style="vertical-align:middle">
                             @if (!item.IsHidden)
-                            { <img src="~/images/products/@item.Photo" alt="@item.Photo" style="width:100px" />
-
+                            { 
+                                @* <img src="~/images/products/@item.Photo" alt="@item.Photo" style="width:100px" /> *@
+                                <img src="~/images/shopproducts/@item.Photo" alt="@item.Photo" style="width:100px" />
                             }
                             else
                             {

@@ -4,8 +4,10 @@
 }
 <div class="box box-primary">
     <div class="box-body">
-        <form class="form-horizontal" method="post" enctype="multipart/form-data" action="~/Employee/SaveData" method="post">
-            <input type="hidden" name="EmployeeID" value="@Model.EmployeeId" />
+        <form class="form-horizontal" method="post" enctype="multipart/form-data" action="~/Employee/SaveData">
+            @* <input type="hidden" name="EmployeeID" value="@Model.EmployeeId" /> *@
+            <input type="hidden" asp-for="EmployeeId" />
+
             <div class="form-group">
                 <label class="control-label col-sm-2">Họ và tên:</label>
                 <div class="col-sm-10">
