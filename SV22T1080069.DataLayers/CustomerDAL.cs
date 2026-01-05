@@ -170,5 +170,12 @@ namespace SV22T1080069.DataLayers
                 return await connection.ExecuteScalarAsync<int>(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
             }
         }
+        public async Task<int> CountAllAsync()
+        {
+            using var connection = await OpenConnectionAsync();
+            var sql = "select count(*) from Customers";
+            return await connection.ExecuteScalarAsync<int>(sql);
+        }
+
     }
 }

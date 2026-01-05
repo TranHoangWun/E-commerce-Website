@@ -448,6 +448,95 @@ namespace SV22T1080069.DataLayers.SQLServer
                 throw;
             }
         }
+        // Tổng số đơn hàng (hoặc tùy bạn là đơn hoàn tất, đơn trong tháng,...)
+        public async Task<int> CountAllAsync()
+        {
+            using var connection = await OpenConnectionAsync();
+            var sql = "select count(*) from Orders";
+            return await connection.ExecuteScalarAsync<int>(sql);
+        }
+
+        // Doanh thu trong tháng (tính theo đơn đã hoàn tất)
+        public async Task<decimal> GetRevenueInMonthAsync(int year, int month)
+        {
+            using var connection = await OpenConnectionAsync();
+            var sql = @"
+        select isnull(sum(od.Quantity * od.SalePrice), 0)
+        from Orders o
+             join OrderDetails od on o.OrderID = od.OrderID
+        where year(o.FinishedTime) = @Year
+          and month(o.FinishedTime) = @Month
+          and o.Status = @FinishedStatus";
+
+            var parameters = new
+            {
+                Year = year,
+                Month = month,
+                FinishedStatus = Constants.ORDER_FINISHED // 4
+            };
+            return await connection.ExecuteScalarAsync<decimal>(sql, parameters);
+        }
+
+        // Doanh thu trong ngày (theo đơn đã hoàn tất)
+        public async Task<decimal> GetRevenueInDayAsync(DateTime date)
+        {
+            using var connection = await OpenConnectionAsync();
+            var sql = @"
+        select isnull(sum(od.Quantity * od.SalePrice), 0)
+        from Orders o
+             join OrderDetails od on o.OrderID = od.OrderID
+        where cast(o.FinishedTime as date) = @Date
+          and o.Status = @FinishedStatus";
+
+            var parameters = new
+            {
+                Date = date.Date,
+                FinishedStatus = Constants.ORDER_FINISHED
+            };
+            return await connection.ExecuteScalarAsync<decimal>(sql, parameters);
+        }
+
+        // Số đơn đang chờ xử lý (ví dụ: trạng thái Mới hoặc Đã duyệt)
+        public async Task<int> CountPendingAsync()
+        {
+            using var connection = await OpenConnectionAsync();
+            var sql = @"
+        select count(*)
+        from Orders
+        where Status in (@InitStatus, @AcceptedStatus)";
+
+            var parameters = new
+            {
+                InitStatus = Constants.ORDER_INIT,       // 1
+                AcceptedStatus = Constants.ORDER_ACCEPTED // 2
+            };
+            return await connection.ExecuteScalarAsync<int>(sql, parameters);
+        }
+
+        // Dữ liệu doanh thu theo ngày cho chart (7 ngày gần nhất)
+        public async Task<IEnumerable<(DateTime Date, decimal Amount)>> GetRevenueChartAsync(DateTime fromDate, DateTime toDate)
+        {
+            using var connection = await OpenConnectionAsync();
+            var sql = @"
+        select
+            cast(o.FinishedTime as date) as [Date],
+            sum(od.Quantity * od.SalePrice) as Amount
+        from Orders o
+             join OrderDetails od on o.OrderID = od.OrderID
+        where cast(o.FinishedTime as date) between @FromDate and @ToDate
+          and o.Status = @FinishedStatus
+        group by cast(o.FinishedTime as date)
+        order by [Date]";
+
+            var parameters = new
+            {
+                FromDate = fromDate.Date,
+                ToDate = toDate.Date,
+                FinishedStatus = Constants.ORDER_FINISHED
+            };
+
+            return await connection.QueryAsync<(DateTime Date, decimal Amount)>(sql, parameters);
+        }
 
     }
 }

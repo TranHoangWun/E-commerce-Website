@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SV22T1080069.Admin.Models;
+using SV22T1080069.BusinessLayers;
 using SV22T1080069.DataLayers;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -17,9 +18,43 @@ namespace SV22T1080069.Admin.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+        /// <summary>
+        /// Dashboard cho trang quản trị 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var today = DateTime.Today;
+
+            var dal = new CustomerDAL(Configuration.ConnectionString);
+            var totalCustomers = await dal.CountAllAsync();
+            var totalOrders = await OrderDataService.OrderDB.CountAllAsync();
+            var revenueThisMonth = await OrderDataService.OrderDB.GetRevenueInMonthAsync(today.Year, today.Month);
+            var revenueToday = await OrderDataService.OrderDB.GetRevenueInDayAsync(today);
+            var pendingOrders = await OrderDataService.OrderDB.CountPendingAsync();
+
+            var chartRaw = await OrderDataService.OrderDB.GetRevenueChartAsync(
+                fromDate: today.AddDays(-6),
+                toDate: today
+            );
+
+            var model = new DashboardViewModel
+            {
+                TotalCustomers = totalCustomers,
+                TotalOrders = totalOrders,
+                RevenueThisMonth = revenueThisMonth,
+                RevenueToday = revenueToday,
+                PendingOrders = pendingOrders,
+                RevenueChart = chartRaw
+                    .Select(x => new RevenuePoint { Date = x.Date, Amount = x.Amount })
+                    .ToList()
+            };
+
+            return View(model);
         }
         public async Task<IActionResult> Test()
         {
