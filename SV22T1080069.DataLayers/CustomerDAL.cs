@@ -147,12 +147,31 @@ namespace SV22T1080069.DataLayers
         public async Task<bool> DeleteAsync(int id)
         {
             using (var connection = await OpenConnectionAsync())
+            using (var tran = connection.BeginTransaction())
             {
-                var sql = "DELETE FROM Customers WHERE CustomerID = @id";
-                var parameters = new { id };
-                return await connection.ExecuteAsync(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                try
+                {
+                    // 1. Xóa các giỏ hàng của khách
+                    var sqlDeleteCarts = "DELETE FROM Carts WHERE CustomerID = @id";
+                    await connection.ExecuteAsync(sqlDeleteCarts, new { id }, tran,
+                                                  commandType: CommandType.Text);
+
+                    // 2. Xóa khách hàng
+                    var sqlDeleteCustomer = "DELETE FROM Customers WHERE CustomerID = @id";
+                    var rows = await connection.ExecuteAsync(sqlDeleteCustomer, new { id }, tran,
+                                                             commandType: CommandType.Text);
+
+                    tran.Commit();
+                    return rows > 0;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    throw;
+                }
             }
         }
+
         /// <summary>
         /// Kiểm tra xem khách hàng có đang được sử dụng hay không, đang có dữ liệu liên quan hay không 
         /// </summary>
